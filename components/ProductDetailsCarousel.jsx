@@ -3,6 +3,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 import { Carousel } from "react-responsive-carousel";
 
 const ProductDetailsCarousel = ({ images }) => {
+    const picture = images?.media[0]
     return (
         <div className="text-white text-[20px] w-full max-w-[1360px] mx-auto sticky top-[50px]">
             <Carousel
@@ -12,13 +13,13 @@ const ProductDetailsCarousel = ({ images }) => {
                 thumbWidth={60}
                 className="productCarousel"
             >
-                {images?.map((img) => (
+                {/* {picture.map((img) => ( */}
                     <img
-                        key={img.id}
-                        src={img.attributes.url}
-                        alt={img.attributes.name}
+                        key={images?.id}
+                        src={picture?.url}
+                        alt=""
                     />
-                ))}
+                {/* ))} */}
                 {/* <img src="/p2.png" />
                 <img src="/p3.png" />
                 <img src="/p4.png" />

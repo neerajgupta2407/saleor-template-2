@@ -1,0 +1,18 @@
+query ShippingMethod($ctoken: UUID!){
+  checkout(token: $ctoken) {
+    shippingMethods {
+      id
+      name
+      active
+      price {
+        currency
+        amount
+      }
+    }
+    availableCollectionPoints {
+      id
+      name
+      clickAndCollectOption
+    }
+  }
+}

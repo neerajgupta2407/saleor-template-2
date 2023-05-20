@@ -1,0 +1,53 @@
+mutation test(
+  $email: String!
+  $quantity: Int!
+  $variantId: ID!
+  $firstName: String!
+  $lastName: String!
+  $streetAddress1: String!
+  $city: String!
+  $postalCode: String!
+  $country: CountryCode!
+  $countryArea: String!
+) {
+  checkoutCreate(
+    input: {
+      channel: "default-channel"
+      email: $email
+      lines: [{ quantity: $quantity, variantId: $variantId }]
+      shippingAddress: {
+        firstName: $firstName
+        lastName: $lastName
+        streetAddress1: $streetAddress1
+        city: $city
+        postalCode: $postalCode
+        country: $country
+        countryArea: $countryArea
+      }
+      billingAddress: {
+        firstName: $firstName
+        lastName: $lastName
+        streetAddress1: $streetAddress1
+        city: $city
+        postalCode: $postalCode
+        country: $country
+        countryArea: $countryArea
+      }
+    }
+  ) {
+    checkout {
+      token
+      totalPrice {
+        gross {
+          amount
+          currency
+        }
+      }
+      isShippingRequired
+    }
+    errors {
+      field
+      code
+    }
+  }
+}

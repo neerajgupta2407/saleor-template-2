@@ -1,25 +1,29 @@
-import { getDiscountedPricePercentage } from "@/utils/helper";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-const ProductCard = ({ data: { attributes: p, id } }) => {
-    return (
-        <Link
-            href={`/product/${p.slug}`}
-            className="transform overflow-hidden bg-white duration-200 hover:scale-105 cursor-pointer"
-        >
-            <Image
-                width={500}
-                height={500}
-                src={p.thumbnail.data.attributes.url}
-                alt={p.name}
-            />
-            <div className="p-4 text-black/[0.9]">
-                <h2 className="text-lg font-medium">{p.name}</h2>
-                <div className="flex items-center text-black/[0.5]">
-                    <p className="mr-2 text-lg font-semibold">
-                        &#8377;{p.price}
-                    </p>
+const ProductCard = ({ key, data }) => {
+    const myLoader=({src})=>{
+        return data.thumbnail.url;
+      }
+  console.log(data);
+  const id = data.id;
+  return (
+    <Link
+      href={`/product/${id}`}
+      className="transform overflow-hidden bg-white duration-200 hover:scale-105 cursor-pointer"
+    >
+      <Image loader={myLoader}
+        width={500}
+        height={500}
+        src={data.thumbnail.url}
+        alt={data.name}
+      />
+      <div className="p-4 text-black/[0.9]">
+        <h2 className="text-lg font-medium">{data.name}</h2>
+        <div className="flex items-center text-black/[0.5]">
+          {/* <p className="mr-2 text-lg font-semibold">
+                        &#8377;{data.pricing.priceRange.start.gross.amount} */}
+          {/* </p>
 
                     {p.original_price && (
                         <>
@@ -32,13 +36,13 @@ const ProductCard = ({ data: { attributes: p, id } }) => {
                                     p.price
                                 )}
                                 % off
-                            </p>
-                        </>
-                    )}
-                </div>
-            </div>
-        </Link>
-    );
+                            </p> */}
+          {/* </> */}
+          {/* )} */}
+        </div>
+      </div>
+    </Link>
+  );
 };
 
 export default ProductCard;

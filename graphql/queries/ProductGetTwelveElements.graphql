@@ -1,0 +1,16 @@
+query ProductGetTwelveElements {
+  products(first: 12, channel: "in") {
+    edges {
+      node {
+        id
+        name
+        thumbnail {
+          url
+        }
+        category {
+          name
+        }
+      }
+    }
+  }
+}

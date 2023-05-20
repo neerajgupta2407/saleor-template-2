@@ -7,9 +7,17 @@ import Footer from "@/components/Footer";
 import { Provider } from "react-redux";
 import store from "@/store/store";
 
+import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
+
+const client = new ApolloClient({
+    uri: "https://shop-api.algomock.in/graphql/",
+    cache: new InMemoryCache(),
+  });
+
 export default function App({ Component, pageProps }) {
     return (
         <>
+        <ApolloProvider client={client}>
             <Head>
                 <title>Online Shoe Store | JS Dev Hindi</title>
                 <meta
@@ -37,6 +45,7 @@ export default function App({ Component, pageProps }) {
                 <Component {...pageProps} />
                 <Footer />
             </Provider>
+            </ApolloProvider>
         </>
     );
 }

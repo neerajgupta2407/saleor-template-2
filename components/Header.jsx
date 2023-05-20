@@ -41,14 +41,14 @@ const Header = () => {
         };
     }, [lastScrollY]);
 
-    useEffect(() => {
-        fetchCategories();
-    }, []);
+    // useEffect(() => {
+    //     fetchCategories();
+    // }, []);
 
-    const fetchCategories = async () => {
-        const { data } = await fetchDataFromApi("/api/categories?populate=*");
-        setCategories(data);
-    };
+    // const fetchCategories = async () => {
+    //     const { data } = await fetchDataFromApi("/api/categories?populate=*");
+    //     setCategories(data);
+    // };
 
     return (
         <header

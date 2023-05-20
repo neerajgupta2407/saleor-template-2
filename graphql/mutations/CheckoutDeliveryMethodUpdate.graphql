@@ -1,0 +1,29 @@
+mutation checkoutDeliveryMethodUpdate($token : UUID!, $deliveryMethodId : ID!){
+  checkoutDeliveryMethodUpdate(
+    token: $token
+    deliveryMethodId: $deliveryMethodId
+  ) {
+    checkout {
+      token
+      deliveryMethod {
+        __typename
+        ... on Warehouse {
+          name
+        }
+        ... on ShippingMethod {
+          name
+        }
+      }
+      totalPrice {
+        gross {
+          amount
+          currency
+        }
+      }
+    }
+    errors {
+      field
+      message
+    }
+  }
+}

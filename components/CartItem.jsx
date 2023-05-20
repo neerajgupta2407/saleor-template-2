@@ -4,8 +4,8 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { updateCart, removeFromCart } from "@/store/cartSlice";
 import { useDispatch } from "react-redux";
 const CartItem = ({ data }) => {
-    const p = data.attributes;
-
+    const p = data?.variant;
+    console.log(p)
     const dispatch = useDispatch();
 
     const updateCartItem = (e, key) => {
@@ -22,7 +22,7 @@ const CartItem = ({ data }) => {
             {/* IMAGE START */}
             <div className="shrink-0 aspect-square w-[50px] md:w-[120px]">
                 <Image
-                    src={p.thumbnail.data.attributes.url}
+                    src={p.thumbnail.url}
                     alt={p.name}
                     width={120}
                     height={120}
@@ -34,23 +34,23 @@ const CartItem = ({ data }) => {
                 <div className="flex flex-col md:flex-row justify-between">
                     {/* PRODUCT TITLE */}
                     <div className="text-lg md:text-2xl font-semibold text-black/[0.8]">
-                        {p.name}
+                        {p?.product?.name}
                     </div>
 
                     {/* PRODUCT SUBTITLE */}
                     <div className="text-sm md:text-md font-medium text-black/[0.5] block md:hidden">
-                        {p.subtitle}
+                        {p?.product?.slug}
                     </div>
 
                     {/* PRODUCT PRICE */}
                     <div className="text-sm md:text-md font-bold text-black/[0.5] mt-2">
-                        MRP : &#8377;{p.price}
+                        MRP : &#8377;{p?.pricing?.price?.gross?.amount}
                     </div>
                 </div>
 
                 {/* PRODUCT SUBTITLE */}
                 <div className="text-md font-medium text-black/[0.5] hidden md:block">
-                    {p.subtitle}
+                    {p?.product?.slug}
                 </div>
 
                 <div className="flex items-center justify-between mt-4">
@@ -63,19 +63,19 @@ const CartItem = ({ data }) => {
                                     updateCartItem(e, "selectedSize")
                                 }
                             >
-                                {p.size.data.map((item, i) => {
+                                {p?.variants?.map((item) => {
                                     return (
                                         <option
-                                            key={i}
-                                            value={item.size}
+                                            key={item.id}
+                                            value={item.name}
                                             disabled={
                                                 !item.enabled ? true : false
                                             }
                                             selected={
-                                                data.selectedSize === item.size
+                                                data.selectedSize === item.name
                                             }
                                         >
-                                            {item.size}
+                                            {item.name}
                                         </option>
                                     );
                                 })}

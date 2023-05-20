@@ -1,0 +1,37 @@
+query ProductFilterByName($first: Int = 50, $after: String, $filter: ProductFilterInput!) {
+  products(filter: $filter,first: $first, channel: "in", after: $after) {
+    edges {
+      node {
+        id
+        name
+        thumbnail {
+          url
+        }
+        category {
+          name
+        }
+        pricing {
+          priceRange {
+            start {
+              gross {
+                amount
+              }
+            }
+            stop {
+              gross {
+                amount
+              }
+            }
+          }
+        }
+      }
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+    totalCount
+  }
+}
