@@ -22,8 +22,8 @@ const CartItem = ({ data }) => {
             {/* IMAGE START */}
             <div className="shrink-0 aspect-square w-[50px] md:w-[120px]">
                 <Image
-                    src={p.thumbnail.url}
-                    alt={p.name}
+                    src={p?.thumbnail?.url}
+                    alt={p?.name}
                     width={120}
                     height={120}
                 />
