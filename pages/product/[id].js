@@ -32,7 +32,8 @@ const ProductDetails = ( ) => {
     console.log(selectedVariantID)
 
     const selectedVariant = product?.variants.find((variant) => variant?.id === selectedVariantID);
-
+    
+    console.log(token)
     const onAddToCart = async () => {
         await addProductToCart({
             variables: { checkoutToken: token, variantId: selectedVariantID },

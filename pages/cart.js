@@ -12,7 +12,6 @@ const Cart = () => {
   const [token] = useLocalStorage("token");
   const { data, loading, error } = useCheckoutFetchByTokenQuery({
     variables: { checkoutToken: token },
-    skip: !token,
   });
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error</div>;
@@ -31,12 +30,7 @@ const Cart = () => {
 //     try {
 //       setLzoading(true);
 //       const stripe = await stripePromise;
-//       const res = await makePaymentRequest("/api/orders", {
-//         products: cartItems,
-//       });
-//       await stripe.redirectToCheckout({
-//         sessionId: res.stripeSession.id,
-//       });
+
 //     } catch (error) {
 //       setLzoading(false);
 //       console.log(error);
@@ -89,13 +83,13 @@ const Cart = () => {
                 </div>
 
                 {/* BUTTON START */}
-                {/* <button
+                <button
                   className="w-full py-4 rounded-full bg-black text-white text-lg font-medium transition-transform active:scale-95 mb-3 hover:opacity-75 flex items-center gap-2 justify-center"
-                  onClick={handlePayment}
+                 
                 >
                   Checkout
-                  {lzoading && <img src="/spinner.svg" />}
-                </button> */}
+                  {/* {lzoading && <img src="/spinner.svg" />} */}
+                </button>
                 {/* BUTTON END */}
               </div>
               {/* SUMMARY END */}

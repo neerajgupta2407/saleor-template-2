@@ -1,7 +1,9 @@
 import HeroBanner from "@/components/HeroBanner";
 import ProductCard from "@/components/ProductCard";
 import Wrapper from "@/components/Wrapper";
-import {useProductFilterByNameQuery } from '@/saleor/api';
+import { useLocalStorage } from "react-use";
+import { useEffect } from "react";
+import {useProductFilterByNameQuery, useCheckoutCreateMutation } from '@/saleor/api';
 
 export default function Home({ }) {
     const { loading, error, data, fetchMore } = useProductFilterByNameQuery({
@@ -11,6 +13,21 @@ export default function Home({ }) {
       });
     const products = data?.products?.edges
     console.log(products)
+    const [token, setToken] = useLocalStorage("token");
+
+  const [checkoutCreate, { kdata, kloading }] = useCheckoutCreateMutation();
+
+  useEffect(() => {
+    async function doCheckout() {
+      const { kdata } = await checkoutCreate();
+      const token = kdata?.checkoutCreate?.checkout?.token;
+
+      setToken(token);
+    }
+
+    doCheckout();
+
+  }, []);
     return (
         <main>
             <HeroBanner />
