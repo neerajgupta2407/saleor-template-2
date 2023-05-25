@@ -7,35 +7,33 @@ import { useSelector } from "react-redux";
 import { useCheckoutFetchByTokenQuery } from "@/saleor/api";
 import { makePaymentRequest } from "@/utils/api";
 import { useLocalStorage } from "react-use";
+import Router from "next/router";
 
 const Cart = () => {
   const [token] = useLocalStorage("token");
   const { data, loading, error } = useCheckoutFetchByTokenQuery({
     variables: { checkoutToken: token },
+    skip: !token,
   });
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error</div>;
 
   const products = data?.checkout?.lines || [];
-  console.log(data)
+  console.log(data);
 
-//   const [lzoading, setLzoading] = useState(false);
-//   const { cartItems } = useSelector((state) => state.cart);
+  //   const [lzoading, setLzoading] = useState(false);
+  //   const { cartItems } = useSelector((state) => state.cart);
 
-//   const subTotal = useMemo(() => {
-//     return cartItems.reduce((total, val) => total + val.attributes.price, 0);
-//   }, [cartItems]);
+  //   const subTotal = useMemo(() => {
+  //     return cartItems.reduce((total, val) => total + val.attributes.price, 0);
+  //   }, [cartItems]);
 
-//   const handlePayment = async () => {
-//     try {
-//       setLzoading(true);
-//       const stripe = await stripePromise;
-
-//     } catch (error) {
-//       setLzoading(false);
-//       console.log(error);
-//     }
-//   };
+  const handlePayment = async () => {
+    Router.push(
+        { pathname: "/checkout", query: { data : JSON.stringify(token),products } },
+        "/checkout"
+      );
+  };
 
   return (
     <div className="w-full md:py-20">
@@ -85,7 +83,7 @@ const Cart = () => {
                 {/* BUTTON START */}
                 <button
                   className="w-full py-4 rounded-full bg-black text-white text-lg font-medium transition-transform active:scale-95 mb-3 hover:opacity-75 flex items-center gap-2 justify-center"
-                 
+                  onClick={handlePayment}
                 >
                   Checkout
                   {/* {lzoading && <img src="/spinner.svg" />} */}

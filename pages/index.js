@@ -19,9 +19,9 @@ export default function Home({ }) {
 
   useEffect(() => {
     async function doCheckout() {
-      const { kdata } = await checkoutCreate();
-      const token = kdata?.checkoutCreate?.checkout?.token;
-
+      const { data } = await checkoutCreate();
+      const token = data?.checkoutCreate?.checkout?.token;
+      console.log('token : ',token)
       setToken(token);
     }
 
@@ -65,4 +65,3 @@ export default function Home({ }) {
         </main>
     );
 }
-

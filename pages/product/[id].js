@@ -10,6 +10,7 @@ import { useRouter } from 'next/router';
 import { useProductByIdQuery, useProductAddVariantToCartMutation } from '@/saleor/api';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Router from "next/router";
 
 import { useLocalStorage } from "react-use";
 
@@ -35,8 +36,9 @@ const ProductDetails = ( ) => {
     
     console.log(token)
     const onAddToCart = async () => {
+
         await addProductToCart({
-            variables: { checkoutToken: token, variantId: selectedVariantID },
+            variables: { checkoutToken: token, variantId: selectedVariantID }
           });
         }
 

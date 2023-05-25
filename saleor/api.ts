@@ -27109,21 +27109,10 @@ export type CheckoutCompleteMutationVariables = Exact<{
 
 export type CheckoutCompleteMutation = { __typename?: 'Mutation', checkoutComplete?: { __typename?: 'CheckoutComplete', confirmationNeeded: boolean, confirmationData?: any | null, order?: { __typename?: 'Order', id: string, status: OrderStatus, token: string, billingAddress?: { __typename?: 'Address', id: string, phone?: string | null, firstName: string, lastName: string, streetAddress1: string, city: string, postalCode: string, isDefaultBillingAddress?: boolean | null, isDefaultShippingAddress?: boolean | null, country: { __typename?: 'CountryDisplay', code: string, country: string } } | null, shippingAddress?: { __typename?: 'Address', id: string, phone?: string | null, firstName: string, lastName: string, streetAddress1: string, city: string, postalCode: string, isDefaultBillingAddress?: boolean | null, isDefaultShippingAddress?: boolean | null, country: { __typename?: 'CountryDisplay', code: string, country: string } } | null } | null, errors: Array<{ __typename?: 'CheckoutError', field?: string | null, message?: string | null, variants?: Array<string> | null, addressType?: AddressTypeEnum | null }> } | null };
 
-export type CheckoutCreateMutationVariables = Exact<{
-  email: Scalars['String'];
-  quantity: Scalars['Int'];
-  variantId: Scalars['ID'];
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
-  streetAddress1: Scalars['String'];
-  city: Scalars['String'];
-  postalCode: Scalars['String'];
-  country: CountryCode;
-  countryArea: Scalars['String'];
-}>;
+export type CheckoutCreateMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CheckoutCreateMutation = { __typename?: 'Mutation', checkoutCreate?: { __typename?: 'CheckoutCreate', checkout?: { __typename?: 'Checkout', id: string, token: any, isShippingRequired: boolean, totalPrice: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } }, shippingMethods: Array<{ __typename?: 'ShippingMethod', id: string, name: string, active: boolean, message?: string | null }>, availableCollectionPoints: Array<{ __typename?: 'Warehouse', id: string, name: string, clickAndCollectOption: WarehouseClickAndCollectOptionEnum }>, availablePaymentGateways: Array<{ __typename?: 'PaymentGateway', id: string, name: string, config: Array<{ __typename?: 'GatewayConfigLine', field: string, value?: string | null }> }> } | null, errors: Array<{ __typename?: 'CheckoutError', field?: string | null, code: CheckoutErrorCode }> } | null };
+export type CheckoutCreateMutation = { __typename?: 'Mutation', checkoutCreate?: { __typename?: 'CheckoutCreate', checkout?: { __typename?: 'Checkout', token: any } | null, errors: Array<{ __typename?: 'CheckoutError', field?: string | null, code: CheckoutErrorCode }> } | null };
 
 export type CheckoutPaymentCreateMutationVariables = Exact<{
   checkoutToken: Scalars['UUID'];
@@ -28260,39 +28249,12 @@ export type CheckoutCompleteMutationHookResult = ReturnType<typeof useCheckoutCo
 export type CheckoutCompleteMutationResult = Apollo.MutationResult<CheckoutCompleteMutation>;
 export type CheckoutCompleteMutationOptions = Apollo.BaseMutationOptions<CheckoutCompleteMutation, CheckoutCompleteMutationVariables>;
 export const CheckoutCreateDocument = gql`
-    mutation CheckoutCreate($email: String!, $quantity: Int!, $variantId: ID!, $firstName: String!, $lastName: String!, $streetAddress1: String!, $city: String!, $postalCode: String!, $country: CountryCode!, $countryArea: String!) {
+    mutation CheckoutCreate {
   checkoutCreate(
-    input: {channel: "in", email: $email, lines: [{quantity: $quantity, variantId: $variantId}], shippingAddress: {firstName: $firstName, lastName: $lastName, streetAddress1: $streetAddress1, city: $city, postalCode: $postalCode, country: $country, countryArea: $countryArea}, billingAddress: {firstName: $firstName, lastName: $lastName, streetAddress1: $streetAddress1, city: $city, postalCode: $postalCode, country: $country, countryArea: $countryArea}}
+    input: {channel: "default-channel", email: "customer@example.com", lines: []}
   ) {
     checkout {
-      id
       token
-      totalPrice {
-        gross {
-          amount
-          currency
-        }
-      }
-      isShippingRequired
-      shippingMethods {
-        id
-        name
-        active
-        message
-      }
-      availableCollectionPoints {
-        id
-        name
-        clickAndCollectOption
-      }
-      availablePaymentGateways {
-        id
-        name
-        config {
-          field
-          value
-        }
-      }
     }
     errors {
       field
@@ -28316,16 +28278,6 @@ export type CheckoutCreateMutationFn = Apollo.MutationFunction<CheckoutCreateMut
  * @example
  * const [checkoutCreateMutation, { data, loading, error }] = useCheckoutCreateMutation({
  *   variables: {
- *      email: // value for 'email'
- *      quantity: // value for 'quantity'
- *      variantId: // value for 'variantId'
- *      firstName: // value for 'firstName'
- *      lastName: // value for 'lastName'
- *      streetAddress1: // value for 'streetAddress1'
- *      city: // value for 'city'
- *      postalCode: // value for 'postalCode'
- *      country: // value for 'country'
- *      countryArea: // value for 'countryArea'
  *   },
  * });
  */
