@@ -12,7 +12,7 @@ mutation test(
 ) {
   checkoutCreate(
     input: {
-      channel: "default-channel"
+      channel: "in"
       email: $email
       lines: [{ quantity: $quantity, variantId: $variantId }]
       shippingAddress: {
@@ -36,6 +36,7 @@ mutation test(
     }
   ) {
     checkout {
+      id
       token
       totalPrice {
         gross {
@@ -44,6 +45,25 @@ mutation test(
         }
       }
       isShippingRequired
+      shippingMethods {
+        id
+        name
+        active
+        message
+      }
+      availableCollectionPoints {
+        id
+        name
+        clickAndCollectOption
+      }
+      availablePaymentGateways {
+        id
+        name
+        config {
+          field
+          value
+        }
+      }
     }
     errors {
       field

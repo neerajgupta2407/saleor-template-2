@@ -27103,28 +27103,20 @@ export type CheckoutBillingAddressUpdateMutationVariables = Exact<{
 export type CheckoutBillingAddressUpdateMutation = { __typename?: 'Mutation', checkoutBillingAddressUpdate?: { __typename?: 'CheckoutBillingAddressUpdate', checkout?: { __typename?: 'Checkout', id: string, token: any, email?: string | null, isShippingRequired: boolean, discountName?: string | null, billingAddress?: { __typename?: 'Address', id: string, phone?: string | null, firstName: string, lastName: string, streetAddress1: string, city: string, postalCode: string, isDefaultBillingAddress?: boolean | null, isDefaultShippingAddress?: boolean | null, country: { __typename?: 'CountryDisplay', code: string, country: string } } | null, shippingAddress?: { __typename?: 'Address', id: string, phone?: string | null, firstName: string, lastName: string, streetAddress1: string, city: string, postalCode: string, isDefaultBillingAddress?: boolean | null, isDefaultShippingAddress?: boolean | null, country: { __typename?: 'CountryDisplay', code: string, country: string } } | null, shippingMethod?: { __typename?: 'ShippingMethod', id: string, name: string, minimumDeliveryDays?: number | null, maximumDeliveryDays?: number | null, translation?: { __typename?: 'ShippingMethodTranslation', id: string, name?: string | null } | null, price: { __typename?: 'Money', currency: string, amount: number } } | null, availableShippingMethods: Array<{ __typename?: 'ShippingMethod', id: string, name: string, minimumDeliveryDays?: number | null, maximumDeliveryDays?: number | null, translation?: { __typename?: 'ShippingMethodTranslation', id: string, name?: string | null } | null, price: { __typename?: 'Money', currency: string, amount: number } }>, availablePaymentGateways: Array<{ __typename?: 'PaymentGateway', id: string, name: string, config: Array<{ __typename?: 'GatewayConfigLine', field: string, value?: string | null }> }>, lines: Array<{ __typename?: 'CheckoutLine', id: string, quantity: number, totalPrice: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', currency: string, amount: number } }, variant: { __typename?: 'ProductVariant', id: string, name: string, product: { __typename?: 'Product', id: string, name: string, slug: string, translation?: { __typename?: 'ProductTranslation', id: string, name?: string | null } | null, thumbnail?: { __typename?: 'Image', url: string, alt?: string | null } | null }, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', currency: string, amount: number } } | null } | null, translation?: { __typename?: 'ProductVariantTranslation', id: string, name: string } | null } }>, discount?: { __typename?: 'Money', currency: string, amount: number } | null, subtotalPrice: { __typename?: 'TaxedMoney', net: { __typename?: 'Money', currency: string, amount: number }, tax: { __typename?: 'Money', currency: string, amount: number } }, shippingPrice: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', currency: string, amount: number } }, totalPrice: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', currency: string, amount: number } } } | null, errors: Array<{ __typename?: 'CheckoutError', field?: string | null, message?: string | null, code: CheckoutErrorCode }> } | null };
 
 export type CheckoutCompleteMutationVariables = Exact<{
-  checkoutToken: Scalars['UUID'];
+  ctoken: Scalars['UUID'];
 }>;
 
 
-export type CheckoutCompleteMutation = { __typename?: 'Mutation', checkoutComplete?: { __typename?: 'CheckoutComplete', confirmationNeeded: boolean, confirmationData?: any | null, order?: { __typename?: 'Order', id: string, status: OrderStatus, token: string, billingAddress?: { __typename?: 'Address', id: string, phone?: string | null, firstName: string, lastName: string, streetAddress1: string, city: string, postalCode: string, isDefaultBillingAddress?: boolean | null, isDefaultShippingAddress?: boolean | null, country: { __typename?: 'CountryDisplay', code: string, country: string } } | null, shippingAddress?: { __typename?: 'Address', id: string, phone?: string | null, firstName: string, lastName: string, streetAddress1: string, city: string, postalCode: string, isDefaultBillingAddress?: boolean | null, isDefaultShippingAddress?: boolean | null, country: { __typename?: 'CountryDisplay', code: string, country: string } } | null } | null, errors: Array<{ __typename?: 'CheckoutError', field?: string | null, message?: string | null, variants?: Array<string> | null, addressType?: AddressTypeEnum | null }> } | null };
+export type CheckoutCompleteMutation = { __typename?: 'Mutation', checkoutComplete?: { __typename?: 'CheckoutComplete', order?: { __typename?: 'Order', id: string, status: OrderStatus } | null, errors: Array<{ __typename?: 'CheckoutError', field?: string | null, message?: string | null }> } | null };
 
 export type CheckoutCreateMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type CheckoutCreateMutation = { __typename?: 'Mutation', checkoutCreate?: { __typename?: 'CheckoutCreate', checkout?: { __typename?: 'Checkout', token: any } | null, errors: Array<{ __typename?: 'CheckoutError', field?: string | null, code: CheckoutErrorCode }> } | null };
 
-export type CheckoutPaymentCreateMutationVariables = Exact<{
-  checkoutToken: Scalars['UUID'];
-  paymentInput: PaymentInput;
-}>;
-
-
-export type CheckoutPaymentCreateMutation = { __typename?: 'Mutation', checkoutPaymentCreate?: { __typename?: 'CheckoutPaymentCreate', payment?: { __typename?: 'Payment', id: string, total?: { __typename?: 'Money', currency: string, amount: number } | null } | null, errors: Array<{ __typename?: 'PaymentError', field?: string | null, message?: string | null }> } | null };
-
 export type CheckoutDeliveryMethodUpdateMutationVariables = Exact<{
-  token: Scalars['UUID'];
-  deliveryMethodId: Scalars['ID'];
+  ctoken: Scalars['UUID'];
+  dId: Scalars['ID'];
 }>;
 
 
@@ -27147,6 +27139,13 @@ export type CheckoutLineUpdateMutationVariables = Exact<{
 
 
 export type CheckoutLineUpdateMutation = { __typename?: 'Mutation', checkoutLinesUpdate?: { __typename?: 'CheckoutLinesUpdate', checkout?: { __typename?: 'Checkout', id: string, token: any, email?: string | null, isShippingRequired: boolean, discountName?: string | null, billingAddress?: { __typename?: 'Address', id: string, phone?: string | null, firstName: string, lastName: string, streetAddress1: string, city: string, postalCode: string, isDefaultBillingAddress?: boolean | null, isDefaultShippingAddress?: boolean | null, country: { __typename?: 'CountryDisplay', code: string, country: string } } | null, shippingAddress?: { __typename?: 'Address', id: string, phone?: string | null, firstName: string, lastName: string, streetAddress1: string, city: string, postalCode: string, isDefaultBillingAddress?: boolean | null, isDefaultShippingAddress?: boolean | null, country: { __typename?: 'CountryDisplay', code: string, country: string } } | null, shippingMethod?: { __typename?: 'ShippingMethod', id: string, name: string, minimumDeliveryDays?: number | null, maximumDeliveryDays?: number | null, translation?: { __typename?: 'ShippingMethodTranslation', id: string, name?: string | null } | null, price: { __typename?: 'Money', currency: string, amount: number } } | null, availableShippingMethods: Array<{ __typename?: 'ShippingMethod', id: string, name: string, minimumDeliveryDays?: number | null, maximumDeliveryDays?: number | null, translation?: { __typename?: 'ShippingMethodTranslation', id: string, name?: string | null } | null, price: { __typename?: 'Money', currency: string, amount: number } }>, availablePaymentGateways: Array<{ __typename?: 'PaymentGateway', id: string, name: string, config: Array<{ __typename?: 'GatewayConfigLine', field: string, value?: string | null }> }>, lines: Array<{ __typename?: 'CheckoutLine', id: string, quantity: number, totalPrice: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', currency: string, amount: number } }, variant: { __typename?: 'ProductVariant', id: string, name: string, product: { __typename?: 'Product', id: string, name: string, slug: string, translation?: { __typename?: 'ProductTranslation', id: string, name?: string | null } | null, thumbnail?: { __typename?: 'Image', url: string, alt?: string | null } | null }, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', currency: string, amount: number } } | null } | null, translation?: { __typename?: 'ProductVariantTranslation', id: string, name: string } | null } }>, discount?: { __typename?: 'Money', currency: string, amount: number } | null, subtotalPrice: { __typename?: 'TaxedMoney', net: { __typename?: 'Money', currency: string, amount: number }, tax: { __typename?: 'Money', currency: string, amount: number } }, shippingPrice: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', currency: string, amount: number } }, totalPrice: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', currency: string, amount: number } } } | null, errors: Array<{ __typename?: 'CheckoutError', field?: string | null, message?: string | null, code: CheckoutErrorCode }> } | null };
+
+export type CheckoutPaymentCreateMutationVariables = Exact<{
+  ctoken: Scalars['UUID'];
+}>;
+
+
+export type CheckoutPaymentCreateMutation = { __typename?: 'Mutation', checkoutPaymentCreate?: { __typename?: 'CheckoutPaymentCreate', payment?: { __typename?: 'Payment', id: string, chargeStatus: PaymentChargeStatusEnum } | null, paymentErrors: Array<{ __typename?: 'PaymentError', field?: string | null, message?: string | null }> } | null };
 
 export type RemoveProductFromCheckoutMutationVariables = Exact<{
   checkoutToken: Scalars['UUID'];
@@ -27189,6 +27188,13 @@ export type LoginMutationVariables = Exact<{
 
 
 export type LoginMutation = { __typename?: 'Mutation', tokenCreate?: { __typename?: 'CreateToken', token?: string | null, refreshToken?: string | null, errors: Array<{ __typename?: 'AccountError', field?: string | null, message?: string | null }> } | null };
+
+export type OrdercompleteMutationVariables = Exact<{
+  ctoken: Scalars['UUID'];
+}>;
+
+
+export type OrdercompleteMutation = { __typename?: 'Mutation', checkoutComplete?: { __typename?: 'CheckoutComplete', order?: { __typename?: 'Order', id: string, status: OrderStatus } | null, errors: Array<{ __typename?: 'CheckoutError', field?: string | null, message?: string | null }> } | null };
 
 export type PasswordChangeMutationVariables = Exact<{
   newPassword: Scalars['String'];
@@ -27244,7 +27250,7 @@ export type TestMutationVariables = Exact<{
 }>;
 
 
-export type TestMutation = { __typename?: 'Mutation', checkoutCreate?: { __typename?: 'CheckoutCreate', checkout?: { __typename?: 'Checkout', token: any, isShippingRequired: boolean, totalPrice: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } } | null, errors: Array<{ __typename?: 'CheckoutError', field?: string | null, code: CheckoutErrorCode }> } | null };
+export type TestMutation = { __typename?: 'Mutation', checkoutCreate?: { __typename?: 'CheckoutCreate', checkout?: { __typename?: 'Checkout', id: string, token: any, isShippingRequired: boolean, totalPrice: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } }, shippingMethods: Array<{ __typename?: 'ShippingMethod', id: string, name: string, active: boolean, message?: string | null }>, availableCollectionPoints: Array<{ __typename?: 'Warehouse', id: string, name: string, clickAndCollectOption: WarehouseClickAndCollectOptionEnum }>, availablePaymentGateways: Array<{ __typename?: 'PaymentGateway', id: string, name: string, config: Array<{ __typename?: 'GatewayConfigLine', field: string, value?: string | null }> }> } | null, errors: Array<{ __typename?: 'CheckoutError', field?: string | null, code: CheckoutErrorCode }> } | null };
 
 export type AvailableShippingMethodsQueryVariables = Exact<{
   channel: Scalars['String'];
@@ -28196,32 +28202,19 @@ export type CheckoutBillingAddressUpdateMutationHookResult = ReturnType<typeof u
 export type CheckoutBillingAddressUpdateMutationResult = Apollo.MutationResult<CheckoutBillingAddressUpdateMutation>;
 export type CheckoutBillingAddressUpdateMutationOptions = Apollo.BaseMutationOptions<CheckoutBillingAddressUpdateMutation, CheckoutBillingAddressUpdateMutationVariables>;
 export const CheckoutCompleteDocument = gql`
-    mutation checkoutComplete($checkoutToken: UUID!) {
-  checkoutComplete(token: $checkoutToken) {
+    mutation checkoutComplete($ctoken: UUID!) {
+  checkoutComplete(token: $ctoken) {
     order {
       id
       status
-      token
-      billingAddress {
-        id
-        ...AddressDetailsFragment
-      }
-      shippingAddress {
-        id
-        ...AddressDetailsFragment
-      }
     }
-    confirmationNeeded
-    confirmationData
     errors {
       field
       message
-      variants
-      addressType
     }
   }
 }
-    ${AddressDetailsFragmentFragmentDoc}`;
+    `;
 export type CheckoutCompleteMutationFn = Apollo.MutationFunction<CheckoutCompleteMutation, CheckoutCompleteMutationVariables>;
 
 /**
@@ -28237,7 +28230,7 @@ export type CheckoutCompleteMutationFn = Apollo.MutationFunction<CheckoutComplet
  * @example
  * const [checkoutCompleteMutation, { data, loading, error }] = useCheckoutCompleteMutation({
  *   variables: {
- *      checkoutToken: // value for 'checkoutToken'
+ *      ctoken: // value for 'ctoken'
  *   },
  * });
  */
@@ -28288,52 +28281,9 @@ export function useCheckoutCreateMutation(baseOptions?: Apollo.MutationHookOptio
 export type CheckoutCreateMutationHookResult = ReturnType<typeof useCheckoutCreateMutation>;
 export type CheckoutCreateMutationResult = Apollo.MutationResult<CheckoutCreateMutation>;
 export type CheckoutCreateMutationOptions = Apollo.BaseMutationOptions<CheckoutCreateMutation, CheckoutCreateMutationVariables>;
-export const CheckoutPaymentCreateDocument = gql`
-    mutation checkoutPaymentCreate($checkoutToken: UUID!, $paymentInput: PaymentInput!) {
-  checkoutPaymentCreate(token: $checkoutToken, input: $paymentInput) {
-    payment {
-      id
-      total {
-        ...PriceFragment
-      }
-    }
-    errors {
-      field
-      message
-    }
-  }
-}
-    ${PriceFragmentFragmentDoc}`;
-export type CheckoutPaymentCreateMutationFn = Apollo.MutationFunction<CheckoutPaymentCreateMutation, CheckoutPaymentCreateMutationVariables>;
-
-/**
- * __useCheckoutPaymentCreateMutation__
- *
- * To run a mutation, you first call `useCheckoutPaymentCreateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCheckoutPaymentCreateMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [checkoutPaymentCreateMutation, { data, loading, error }] = useCheckoutPaymentCreateMutation({
- *   variables: {
- *      checkoutToken: // value for 'checkoutToken'
- *      paymentInput: // value for 'paymentInput'
- *   },
- * });
- */
-export function useCheckoutPaymentCreateMutation(baseOptions?: Apollo.MutationHookOptions<CheckoutPaymentCreateMutation, CheckoutPaymentCreateMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CheckoutPaymentCreateMutation, CheckoutPaymentCreateMutationVariables>(CheckoutPaymentCreateDocument, options);
-      }
-export type CheckoutPaymentCreateMutationHookResult = ReturnType<typeof useCheckoutPaymentCreateMutation>;
-export type CheckoutPaymentCreateMutationResult = Apollo.MutationResult<CheckoutPaymentCreateMutation>;
-export type CheckoutPaymentCreateMutationOptions = Apollo.BaseMutationOptions<CheckoutPaymentCreateMutation, CheckoutPaymentCreateMutationVariables>;
 export const CheckoutDeliveryMethodUpdateDocument = gql`
-    mutation checkoutDeliveryMethodUpdate($token: UUID!, $deliveryMethodId: ID!) {
-  checkoutDeliveryMethodUpdate(token: $token, deliveryMethodId: $deliveryMethodId) {
+    mutation checkoutDeliveryMethodUpdate($ctoken: UUID!, $dId: ID!) {
+  checkoutDeliveryMethodUpdate(token: $ctoken, deliveryMethodId: $dId) {
     checkout {
       token
       deliveryMethod {
@@ -28374,8 +28324,8 @@ export type CheckoutDeliveryMethodUpdateMutationFn = Apollo.MutationFunction<Che
  * @example
  * const [checkoutDeliveryMethodUpdateMutation, { data, loading, error }] = useCheckoutDeliveryMethodUpdateMutation({
  *   variables: {
- *      token: // value for 'token'
- *      deliveryMethodId: // value for 'deliveryMethodId'
+ *      ctoken: // value for 'ctoken'
+ *      dId: // value for 'dId'
  *   },
  * });
  */
@@ -28468,6 +28418,49 @@ export function useCheckoutLineUpdateMutation(baseOptions?: Apollo.MutationHookO
 export type CheckoutLineUpdateMutationHookResult = ReturnType<typeof useCheckoutLineUpdateMutation>;
 export type CheckoutLineUpdateMutationResult = Apollo.MutationResult<CheckoutLineUpdateMutation>;
 export type CheckoutLineUpdateMutationOptions = Apollo.BaseMutationOptions<CheckoutLineUpdateMutation, CheckoutLineUpdateMutationVariables>;
+export const CheckoutPaymentCreateDocument = gql`
+    mutation checkoutPaymentCreate($ctoken: UUID!) {
+  checkoutPaymentCreate(
+    token: $ctoken
+    input: {gateway: "mirumee.payments.dummy_credit_card", token: "1"}
+  ) {
+    payment {
+      id
+      chargeStatus
+    }
+    paymentErrors {
+      field
+      message
+    }
+  }
+}
+    `;
+export type CheckoutPaymentCreateMutationFn = Apollo.MutationFunction<CheckoutPaymentCreateMutation, CheckoutPaymentCreateMutationVariables>;
+
+/**
+ * __useCheckoutPaymentCreateMutation__
+ *
+ * To run a mutation, you first call `useCheckoutPaymentCreateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCheckoutPaymentCreateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [checkoutPaymentCreateMutation, { data, loading, error }] = useCheckoutPaymentCreateMutation({
+ *   variables: {
+ *      ctoken: // value for 'ctoken'
+ *   },
+ * });
+ */
+export function useCheckoutPaymentCreateMutation(baseOptions?: Apollo.MutationHookOptions<CheckoutPaymentCreateMutation, CheckoutPaymentCreateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CheckoutPaymentCreateMutation, CheckoutPaymentCreateMutationVariables>(CheckoutPaymentCreateDocument, options);
+      }
+export type CheckoutPaymentCreateMutationHookResult = ReturnType<typeof useCheckoutPaymentCreateMutation>;
+export type CheckoutPaymentCreateMutationResult = Apollo.MutationResult<CheckoutPaymentCreateMutation>;
+export type CheckoutPaymentCreateMutationOptions = Apollo.BaseMutationOptions<CheckoutPaymentCreateMutation, CheckoutPaymentCreateMutationVariables>;
 export const RemoveProductFromCheckoutDocument = gql`
     mutation RemoveProductFromCheckout($checkoutToken: UUID!, $lineId: ID!, $locale: LanguageCodeEnum!) {
   checkoutLineDelete(token: $checkoutToken, lineId: $lineId) {
@@ -28671,6 +28664,46 @@ export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginM
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const OrdercompleteDocument = gql`
+    mutation Ordercomplete($ctoken: UUID!) {
+  checkoutComplete(token: $ctoken) {
+    order {
+      id
+      status
+    }
+    errors {
+      field
+      message
+    }
+  }
+}
+    `;
+export type OrdercompleteMutationFn = Apollo.MutationFunction<OrdercompleteMutation, OrdercompleteMutationVariables>;
+
+/**
+ * __useOrdercompleteMutation__
+ *
+ * To run a mutation, you first call `useOrdercompleteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useOrdercompleteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [ordercompleteMutation, { data, loading, error }] = useOrdercompleteMutation({
+ *   variables: {
+ *      ctoken: // value for 'ctoken'
+ *   },
+ * });
+ */
+export function useOrdercompleteMutation(baseOptions?: Apollo.MutationHookOptions<OrdercompleteMutation, OrdercompleteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<OrdercompleteMutation, OrdercompleteMutationVariables>(OrdercompleteDocument, options);
+      }
+export type OrdercompleteMutationHookResult = ReturnType<typeof useOrdercompleteMutation>;
+export type OrdercompleteMutationResult = Apollo.MutationResult<OrdercompleteMutation>;
+export type OrdercompleteMutationOptions = Apollo.BaseMutationOptions<OrdercompleteMutation, OrdercompleteMutationVariables>;
 export const PasswordChangeDocument = gql`
     mutation PasswordChange($newPassword: String!, $oldPassword: String!) {
   passwordChange(newPassword: $newPassword, oldPassword: $oldPassword) {
@@ -28894,9 +28927,10 @@ export type SignupMutationOptions = Apollo.BaseMutationOptions<SignupMutation, S
 export const TestDocument = gql`
     mutation test($email: String!, $quantity: Int!, $variantId: ID!, $firstName: String!, $lastName: String!, $streetAddress1: String!, $city: String!, $postalCode: String!, $country: CountryCode!, $countryArea: String!) {
   checkoutCreate(
-    input: {channel: "default-channel", email: $email, lines: [{quantity: $quantity, variantId: $variantId}], shippingAddress: {firstName: $firstName, lastName: $lastName, streetAddress1: $streetAddress1, city: $city, postalCode: $postalCode, country: $country, countryArea: $countryArea}, billingAddress: {firstName: $firstName, lastName: $lastName, streetAddress1: $streetAddress1, city: $city, postalCode: $postalCode, country: $country, countryArea: $countryArea}}
+    input: {channel: "in", email: $email, lines: [{quantity: $quantity, variantId: $variantId}], shippingAddress: {firstName: $firstName, lastName: $lastName, streetAddress1: $streetAddress1, city: $city, postalCode: $postalCode, country: $country, countryArea: $countryArea}, billingAddress: {firstName: $firstName, lastName: $lastName, streetAddress1: $streetAddress1, city: $city, postalCode: $postalCode, country: $country, countryArea: $countryArea}}
   ) {
     checkout {
+      id
       token
       totalPrice {
         gross {
@@ -28905,6 +28939,25 @@ export const TestDocument = gql`
         }
       }
       isShippingRequired
+      shippingMethods {
+        id
+        name
+        active
+        message
+      }
+      availableCollectionPoints {
+        id
+        name
+        clickAndCollectOption
+      }
+      availablePaymentGateways {
+        id
+        name
+        config {
+          field
+          value
+        }
+      }
     }
     errors {
       field

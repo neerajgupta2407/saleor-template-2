@@ -21,11 +21,11 @@ const ProductCard = ({ key, data }) => {
       <div className="p-4 text-black/[0.9]">
         <h2 className="text-lg font-medium">{data.name}</h2>
         <div className="flex items-center text-black/[0.5]">
-          {/* <p className="mr-2 text-lg font-semibold">
-                        &#8377;{data.pricing.priceRange.start.gross.amount} */}
-          {/* </p>
+          <p className="mr-2 text-lg font-semibold">
+                        &#8377;{data.pricing.priceRange.start.gross.amount} 
+          </p>
 
-                    {p.original_price && (
+                    {/* {p.original_price && (
                         <>
                             <p className="text-base  font-medium line-through">
                                 &#8377;{p.original_price}
@@ -36,9 +36,8 @@ const ProductCard = ({ key, data }) => {
                                     p.price
                                 )}
                                 % off
-                            </p> */}
-          {/* </> */}
-          {/* )} */}
+                            </p>  */}
+         
         </div>
       </div>
     </Link>

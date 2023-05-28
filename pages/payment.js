@@ -1,16 +1,31 @@
-import React from 'react'
-import { useCheckoutComplete } from '@/saleor/api';
+import React,{useEffect} from 'react'
+import { useCheckoutPaymentCreateMutation } from '@/saleor/api';
+import Router from "next/router";
 
  function payment() {
   const {ctoken} = Router.query;
-  const {checkoutComplete} = useCheckoutComplete()
-  const {loading, error, data } = checkoutComplete({
-    variables : {
-      'token' : ctoken
-    }
-  })
+  const [checkoutPaymentCreate, { loading, error }] = useCheckoutPaymentCreateMutation();
+  useEffect(() => {
+    const checkoutPaymentCreateMethod = async () => { 
+      try {
+        const { data } = await checkoutPaymentCreate({
+          variables: {
+            ctoken: ctoken,
+            locale: "EN"
+          }
+        });
+        console.log("payment create data : ", data);
+        if (data) {
+          Router.push({ pathname: "/ordersuccess", query: { ctoken } }, "/ordersuccess");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
 
-  console.log(data)
+    checkoutPaymentCreateMethod();
+  }, []);
+
   return (
 
     <div>

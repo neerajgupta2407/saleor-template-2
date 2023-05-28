@@ -19,7 +19,7 @@ const Cart = () => {
   if (error) return <div>Error</div>;
 
   const products = data?.checkout?.lines || [];
-  console.log(data);
+  console.log(products);
 
   //   const [lzoading, setLzoading] = useState(false);
   //   const { cartItems } = useSelector((state) => state.cart);
@@ -30,7 +30,7 @@ const Cart = () => {
 
   const handlePayment = async () => {
     Router.push(
-        { pathname: "/checkout", query: { data : JSON.stringify(token),products } },
+        { pathname: "/checkout", query: { data : JSON.stringify(products) } },
         "/checkout"
       );
   };

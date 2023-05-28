@@ -11,10 +11,11 @@ const styles = {
 
 function CheckoutSidebar(){
   const products = JSON.parse(Router.query.data);
-//   const total = products.reduce((acc, item) => {
-//     const price = item.totalPrice.gross.amount;
-//     return acc + price;
-//   }, 0);
+  console.log(products)
+  const total = products.reduce((acc, item) => {
+    const price = item.totalPrice.gross.amount;
+    return acc + price;
+  }, 0);
   return (
     <div className="bg-white rounded-md p-4">
       <h2 className="text-lg font-semibold mb-4">Order Summary</h2>
@@ -25,14 +26,14 @@ function CheckoutSidebar(){
               <img className={styles.product.image} src={item.variant.product.thumbnail.url}></img>
               <span className="text-gray-700">{item.totalPrice.gross.amount/item.variant.pricing.price.gross.amount}</span>
               <span className="text-gray-700">{item.variant.product.slug}</span>
-              <span className="text-gray-700">${item.totalPrice.gross.amount}</span>
+              <span className="text-gray-700">MRP : &#8377;{item.totalPrice.gross.amount}</span>
             </div>
           </li>
          ))} 
       </ul>
       <div className="flex justify-between items-center mt-4">
         <span className="text-gray-600">Total:</span>
-        <span className="text-gray-600">${item.totalPrice.gross.amount}</span>
+        <span className="text-gray-600">&#8377;{total}</span>
       </div>
     </div>
   )

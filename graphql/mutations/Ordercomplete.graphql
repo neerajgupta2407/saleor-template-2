@@ -1,4 +1,4 @@
-mutation checkoutComplete($ctoken : UUID!) {
+mutation Ordercomplete($ctoken : UUID!) {
   checkoutComplete(token: $ctoken) {
     order {
       id

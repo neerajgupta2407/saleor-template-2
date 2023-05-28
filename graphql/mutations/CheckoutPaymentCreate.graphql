@@ -1,0 +1,18 @@
+mutation checkoutPaymentCreate($ctoken : UUID!){
+  checkoutPaymentCreate(
+    token: $ctoken
+    input: {
+      gateway: "mirumee.payments.dummy_credit_card"
+      token: "1"
+    }
+  ) {
+    payment {
+      id
+      chargeStatus
+    }
+    paymentErrors {
+      field
+      message
+    }
+  }
+}

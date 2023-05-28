@@ -1,7 +1,7 @@
-mutation checkoutDeliveryMethodUpdate($token : UUID!, $deliveryMethodId : ID!){
+mutation checkoutDeliveryMethodUpdate($ctoken : UUID!, $dId : ID!){
   checkoutDeliveryMethodUpdate(
-    token: $token
-    deliveryMethodId: $deliveryMethodId
+    token: $ctoken
+    deliveryMethodId: $dId
   ) {
     checkout {
       token
