@@ -20,6 +20,7 @@ const Cart = () => {
 
   const products = data?.checkout?.lines || [];
   console.log(products);
+  localStorage.setItem("products",  JSON.stringify(products))
 
   //   const [lzoading, setLzoading] = useState(false);
   //   const { cartItems } = useSelector((state) => state.cart);

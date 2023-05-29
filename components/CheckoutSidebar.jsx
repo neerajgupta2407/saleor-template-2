@@ -10,7 +10,7 @@ const styles = {
 }
 
 function CheckoutSidebar(){
-  const products = JSON.parse(Router.query.data);
+  const products = JSON.parse(localStorage.getItem("products"))
   console.log(products)
   const total = products.reduce((acc, item) => {
     const price = item.totalPrice.gross.amount;

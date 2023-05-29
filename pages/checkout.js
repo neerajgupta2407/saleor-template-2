@@ -7,7 +7,8 @@ import Router from 'next/router'
 
 
 const Checkout = () => {
-  const products = JSON.parse(Router.query.data);
+  const products = JSON.parse(localStorage.getItem("products"))
+  
   console.log(products)
   // const [token] = useLocalStorage('token');
   // const { data, loading, error } = useCheckoutFetchByTokenQuery({

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Router from "next/router";
 
 function CheckoutForm() {
-  const products = JSON.parse(Router.query.data);
+  const products = JSON.parse(localStorage.getItem("products"))
   const initialCheckoutValues = {
     email: "",
     variantId: "",
@@ -78,6 +78,8 @@ function CheckoutForm() {
       console.log(ctoken)
 
       if(ctoken){
+
+      localStorage.setItem("ctoken",ctoken)
 
       Router.push(
         { pathname: "/shippingmethod", query: { data : JSON.stringify(ctoken) } },

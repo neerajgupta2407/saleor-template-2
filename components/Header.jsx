@@ -13,13 +13,14 @@ import { VscChromeClose } from "react-icons/vsc";
 import { fetchDataFromApi } from "@/utils/api";
 import { useSelector } from "react-redux";
 
-const Header = () => {
+const Header = ({ isLoggedIn }) => {
   const [mobileMenu, setMobileMenu] = useState(false);
   const [showCatMenu, setShowCatMenu] = useState(false);
   const [show, setShow] = useState("translate-y-0");
   const [lastScrollY, setLastScrollY] = useState(0);
   const [categories, setCategories] = useState(null);
-
+  
+  
   const { cartItems } = useSelector((state) => state.cart);
 
   const controlNavbar = () => {
@@ -149,4 +150,14 @@ const Header = () => {
   );
 };
 
+export const getServerSideProps = async (context) => {
+    // Logic to determine if the user is logged in or logged out
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  
+    return {
+      props: {
+        isLoggedIn,
+      },
+    };
+  };
 export default Header;

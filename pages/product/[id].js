@@ -34,6 +34,7 @@ const ProductDetails = () => {
   const selectedVariantID = queryVariant || product?.variants[0].id;
 
   console.log(selectedVariantID);
+  localStorage.setItem("selectedVariantID",selectedVariantID)
 
   const selectedVariant = product?.variants.find(
     (variant) => variant?.id === selectedVariantID

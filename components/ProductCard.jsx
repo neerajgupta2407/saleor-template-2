@@ -13,8 +13,8 @@ const ProductCard = ({ key, data }) => {
       className="transform overflow-hidden bg-white duration-200 hover:scale-105 cursor-pointer"
     >
       <Image loader={myLoader}
-        width={500}
-        height={500}
+        width={250}
+        height={250}
         src={data.thumbnail.url}
         alt={data.name}
       />

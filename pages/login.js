@@ -47,6 +47,10 @@ export default function Login() {
         const refreshToken = data?.tokenCreate?.refreshToken;
 
         localStorage.setItem("accessToken", accessToken);
+        if(accessToken)
+        {
+            localStorage.setItem('isLoggedIn', true);
+        }
         localStorage.setItem("refreshToken", refreshToken);
 
         // setAuth({"accessToken" : accessToken, "refreshToken" : refreshToken});

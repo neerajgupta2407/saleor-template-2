@@ -1,12 +1,14 @@
-import React,{useEffect} from 'react'
+import React,{useEffect,useState} from 'react'
 import {useOrdercompleteMutation } from '@/saleor/api';
 import Router from "next/router";
 import {AiFillCheckCircle} from "react-icons/ai" ;
 import Link from 'next/link';
 
- function payment() {
-  const {ctoken} = Router.query;
-  const [checkoutComplete] = useOrdercompleteMutation();
+ function ordersuccess() {
+    const [checkoutComplete] = useOrdercompleteMutation();
+    const [myValue, setMyValue] = useState('Initial Value');
+    useEffect(() => {
+  const ctoken = localStorage.getItem("ctoken")
   
     const checkoutMethod = async () => { 
       try {
@@ -25,16 +27,17 @@ import Link from 'next/link';
     };
 
     const res = checkoutMethod();
+    setMyValue(res);
 
-    const handleClick = () => {
-        
-    }
-  
- 
+    console.log(res)
+}, []);
+    
+
+console.log(myValue)
   return (
 
     <div>
-      {res && <div className="flex flex-col items-center justify-center h-screen">
+      {myValue  && <div className="flex flex-col items-center justify-center h-screen">
       <AiFillCheckCircle className="text-green-500 text-6xl mb-4" />
       <h1 className="text-4xl font-bold mb-4">Order Success!</h1>
       <p className="text-lg">Thank you for your order.</p>
@@ -47,4 +50,4 @@ import Link from 'next/link';
   )
 }
 
-export default payment
+export default ordersuccess

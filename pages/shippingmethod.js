@@ -4,25 +4,26 @@ import Router from 'next/router';
 
 function shippingmethod() {
 
-    const ctoken = JSON.parse(Router.query.data);
-    console.log('data on shipping', ctoken);
+    // const ctoken = JSON.parse(Router.query.data);
+    const ctokenn = localStorage.getItem("ctoken")
+    console.log('data on shipping', ctokenn);
 
     const {loading, error, data } = useShippingMethodQuery({
         variables : {
-          'ctoken' : ctoken
+          'ctoken' : ctokenn
         }
       })
       const dID = data?.checkout?.availableCollectionPoints[0].id;
-      console.log(dID);
+      localStorage.setItem("dID",dID)
 
       if(dID){
         Router.push(
-            { pathname: "/selectmethod", query: {ctoken,dID}},
+            { pathname: "/selectmethod"},
             "/selectmethod"
           );
       }
 
-  return (<>shipping methods</>
+  return (<></>
     // <div>{availableMethods.map((item) => {
     //     return(
     //         <div>

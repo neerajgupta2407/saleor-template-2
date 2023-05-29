@@ -3,9 +3,8 @@ import { useCheckoutDeliveryMethodUpdateMutation } from "@/saleor/api";
 import Router from "next/router";
 
  function selectmethod() {
-  const { ctoken, dID } = Router.query;
-  console.log("ctoken : ", ctoken);
-  console.log("dID : ", dID);
+  const ctoken = localStorage.getItem("ctoken")
+  const dID = localStorage.getItem("dID")
   
   const [checkoutDeliveryMethodUpdate, { loading, error }] = useCheckoutDeliveryMethodUpdateMutation();
 
@@ -21,7 +20,7 @@ import Router from "next/router";
         });
         console.log("selectmethod data: ", data);
         if (data) {
-          Router.push({ pathname: "/payment", query: { ctoken } }, "/payment");
+          Router.push({ pathname: "/payment"});
         }
       } catch (error) {
         console.error("Error:", error);
@@ -32,7 +31,7 @@ import Router from "next/router";
   }, []);
 
 
-  return <div>select method</div>;
+  return <div></div>;
 }
 
 export default selectmethod;

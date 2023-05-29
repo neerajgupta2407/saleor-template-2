@@ -3,7 +3,7 @@ import { useCheckoutPaymentCreateMutation } from '@/saleor/api';
 import Router from "next/router";
 
  function payment() {
-  const {ctoken} = Router.query;
+  const ctoken = localStorage.getItem("ctoken")
   const [checkoutPaymentCreate, { loading, error }] = useCheckoutPaymentCreateMutation();
   useEffect(() => {
     const checkoutPaymentCreateMethod = async () => { 
@@ -16,7 +16,7 @@ import Router from "next/router";
         });
         console.log("payment create data : ", data);
         if (data) {
-          Router.push({ pathname: "/ordersuccess", query: { ctoken } }, "/ordersuccess");
+          Router.push({ pathname: "/ordersuccess"});
         }
       } catch (error) {
         console.error("Error:", error);
@@ -29,7 +29,7 @@ import Router from "next/router";
   return (
 
     <div>
-        Payment
+       
     </div>
   )
 }
