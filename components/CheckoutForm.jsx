@@ -198,7 +198,6 @@ function CheckoutForm() {
             </div>
 
             <div className="flex justify-between items-center">
-              <p className="text-gray-600">Total: $99.99</p>
               <button
                 onClick={handleButtonClick}
                 className="bg-[#f02d34] text-white px-6 py-2 rounded-md hover:bg-[#f02d34] border-none"

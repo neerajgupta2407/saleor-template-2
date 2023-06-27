@@ -4,7 +4,7 @@ import Link from "next/link";
 import Wrapper from "@/components/Wrapper";
 import CartItem from "@/components/CartItem";
 import { useSelector } from "react-redux";
-import { useCheckoutFetchByTokenQuery } from "@/saleor/api";
+import { useCheckoutFetchByTokenQuery, useDeleteitemMutation, useUpdateitemMutation } from "@/saleor/api";
 import { makePaymentRequest } from "@/utils/api";
 import { useLocalStorage } from "react-use";
 import Router from "next/router";
@@ -17,6 +17,7 @@ import {
 } from "react-icons/ai";
 import { TiDeleteOutline } from "react-icons/ti";
 import { Button } from "react-bootstrap";
+import Productitem from "@/components/Productitem";
 const Cart = () => {
   const [token] = useLocalStorage("token");
   const { data, loading, error } = useCheckoutFetchByTokenQuery({
@@ -39,12 +40,35 @@ const Cart = () => {
   //     return cartItems.reduce((total, val) => total + val.attributes.price, 0);
   //   }, [cartItems]);
 
+  // const [checkoutLineDelete] = useDeleteitemMutation();
+
+  // const handledelete = () => {
+  //   checkoutLineDelete({
+  //     variables: { checkoutToken: token, variantId: lineid },
+  //   });
+  //   localStorage.setItem("productsL", 0);
+  //   Router.reload();
+  // };
+
+  // Handle quantity change
+  // const [checkoutLineUpdate] = useUpdateitemMutation();
+  // const handleQuantityChange = (event,product) => {
+  //   const newQuantity = event.target.value;
+  //   setQty(newQuantity);
+  //   checkoutLineUpdate({
+  //     variables: { checkoutToken: token, variantId: product?.id, quantity: newQuantity },
+  //   });
+  //   localStorage.setItem("productsL", 0);
+  //   Router.reload();
+  // };
+
   const handlePayment = async () => {
     Router.push(
       { pathname: "/checkout", query: { data: JSON.stringify(products) } },
       "/checkout"
     );
   };
+
 
   return (
     <div className="cart-wrapper">
@@ -74,45 +98,7 @@ const Cart = () => {
         <div className="product-container">
           {products.length >= 1 &&
             products.map((product) => (
-              <div className="product" key="">
-                <img
-                  loader={product?.variant?.product?.thumbnail?.url}
-                  src={product?.variant?.product?.thumbnail?.url}
-                  className="cart-product-image"
-                />
-                {console.log(product?.variant?.product?.thumbnail?.url)}
-                <div className="item-desc">
-                  <div className="flex top mb-30">
-                    <h5>{product?.variant?.product?.name}</h5>
-                  </div>
-                  <h4>
-                    MRP : &#8377;
-                    {product?.variant?.pricing?.price?.gross?.amount}
-                  </h4>
-                  <div className="flex bottom">
-                    <div>
-                      <p className="quantity-desc">
-                        <span className="minus">
-                          <AiOutlineMinus />
-                        </span>
-                        <span className="num" onClick="">
-                          quantity
-                        </span>
-                        <span className="plus">
-                          <AiOutlinePlus />
-                        </span>
-                      </p>
-                    </div>
-                    <button
-                      type="button"
-                      className="remove-item"
-                      // onClick={() => onRemove(item)}
-                    >
-                      <TiDeleteOutline />
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <Productitem product={product}/>
             ))}
         </div>
         {products.length >= 1 && (

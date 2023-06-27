@@ -46,10 +46,24 @@ const ProductDetails = () => {
 
   const selectedVariantID = queryVariant || product?.variants[0].id;
   var pl = 0;
+  
+  const [qty, setQty] = useState(1);
+
+  const incQty = () => {
+    setQty((prevQty) => prevQty + 1);
+  };
+
+  const decQty = () => {
+    setQty((prevQty) => {
+      if (prevQty - 1 < 1) return 1;
+
+      return prevQty - 1;
+    });
+  };
 
   const onAddToCart = async () => {
     const { data, loading, error } = await addProductToCart({
-      variables: { checkoutToken: token, variantId: selectedVariantID },
+      variables: { checkoutToken: token, variantId: selectedVariantID, qty: qty },
     });
     pl++;
     console.log("pl", pl);
@@ -120,19 +134,7 @@ const ProductDetails = () => {
     return product?.media[0]?.url;
   };
 
-  const [qty, setQty] = useState(1);
-
-  const incQty = () => {
-    setQty((prevQty) => prevQty + 1);
-  };
-
-  const decQty = () => {
-    setQty((prevQty) => {
-      if (prevQty - 1 < 1) return 1;
-
-      return prevQty - 1;
-    });
-  };
+  
 
   const [showCart, setShowCart] = useState(false);
 

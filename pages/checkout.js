@@ -11,17 +11,6 @@ const Checkout = () => {
   const products = JSON.parse(localStorage.getItem("products"))
   
   console.log(products)
-  // const [token] = useLocalStorage('token');
-  // const { data, loading, error } = useCheckoutFetchByTokenQuery({
-  //   variables: { checkoutToken: token },
-  //   skip: !token,
-  // });
-
-  // if (loading) return <div>Loading...</div>;
-  // if (error) return <div>Error</div>;
-  // if (!data || !data.checkout) return null;
-
-  // const products = data.checkout?.lines || [];
 
   return (
     <>
