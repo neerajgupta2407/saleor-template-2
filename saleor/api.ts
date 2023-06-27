@@ -27181,6 +27181,14 @@ export type SetAddressDefaultMutationVariables = Exact<{
 
 export type SetAddressDefaultMutation = { __typename?: 'Mutation', accountSetDefaultAddress?: { __typename?: 'AccountSetDefaultAddress', user?: { __typename?: 'User', addresses: Array<{ __typename?: 'Address', id: string, phone?: string | null, firstName: string, lastName: string, streetAddress1: string, city: string, postalCode: string, isDefaultBillingAddress?: boolean | null, isDefaultShippingAddress?: boolean | null, country: { __typename?: 'CountryDisplay', code: string, country: string } }> } | null, errors: Array<{ __typename?: 'AccountError', code: AccountErrorCode, message?: string | null }> } | null };
 
+export type DeleteitemMutationVariables = Exact<{
+  checkoutToken: Scalars['UUID'];
+  variantId: Scalars['ID'];
+}>;
+
+
+export type DeleteitemMutation = { __typename?: 'Mutation', checkoutLineDelete?: { __typename?: 'CheckoutLineDelete', checkout?: { __typename?: 'Checkout', lines: Array<{ __typename?: 'CheckoutLine', id: string, quantity: number, variant: { __typename?: 'ProductVariant', id: string } }> } | null, errors: Array<{ __typename?: 'CheckoutError', field?: string | null, message?: string | null }> } | null };
+
 export type LoginMutationVariables = Exact<{
   email: Scalars['String'];
   password: Scalars['String'];
@@ -27251,6 +27259,20 @@ export type TestMutationVariables = Exact<{
 
 
 export type TestMutation = { __typename?: 'Mutation', checkoutCreate?: { __typename?: 'CheckoutCreate', checkout?: { __typename?: 'Checkout', id: string, token: any, isShippingRequired: boolean, totalPrice: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } }, shippingMethods: Array<{ __typename?: 'ShippingMethod', id: string, name: string, active: boolean, message?: string | null }>, availableCollectionPoints: Array<{ __typename?: 'Warehouse', id: string, name: string, clickAndCollectOption: WarehouseClickAndCollectOptionEnum }>, availablePaymentGateways: Array<{ __typename?: 'PaymentGateway', id: string, name: string, config: Array<{ __typename?: 'GatewayConfigLine', field: string, value?: string | null }> }> } | null, errors: Array<{ __typename?: 'CheckoutError', field?: string | null, code: CheckoutErrorCode }> } | null };
+
+export type UpdateitemMutationVariables = Exact<{
+  checkoutToken: Scalars['UUID'];
+  variantId: Scalars['ID'];
+  quantity?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type UpdateitemMutation = { __typename?: 'Mutation', checkoutLinesUpdate?: { __typename?: 'CheckoutLinesUpdate', checkout?: { __typename?: 'Checkout', lines: Array<{ __typename?: 'CheckoutLine', id: string, quantity: number, variant: { __typename?: 'ProductVariant', id: string } }> } | null, errors: Array<{ __typename?: 'CheckoutError', field?: string | null, message?: string | null }> } | null };
+
+export type AboutPageQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AboutPageQuery = { __typename?: 'Query', page?: { __typename?: 'Page', content?: any | null } | null };
 
 export type AvailableShippingMethodsQueryVariables = Exact<{
   channel: Scalars['String'];
@@ -27388,7 +27410,7 @@ export type ProductByIdQueryVariables = Exact<{
 }>;
 
 
-export type ProductByIdQuery = { __typename?: 'Query', product?: { __typename?: 'Product', id: string, name: string, description?: any | null, media?: Array<{ __typename?: 'ProductMedia', url: string }> | null, category?: { __typename?: 'Category', name: string } | null, variants?: Array<{ __typename?: 'ProductVariant', id: string, name: string, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number } } | null } | null }> | null } | null };
+export type ProductByIdQuery = { __typename?: 'Query', product?: { __typename?: 'Product', id: string, name: string, description?: any | null, media?: Array<{ __typename?: 'ProductMedia', url: string }> | null, category?: { __typename?: 'Category', name: string } | null, variants?: Array<{ __typename?: 'ProductVariant', id: string, name: string, quantityAvailable?: number | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number } } | null } | null }> | null } | null };
 
 export type ProductBySlugQueryVariables = Exact<{
   slug: Scalars['String'];
@@ -28625,6 +28647,52 @@ export function useSetAddressDefaultMutation(baseOptions?: Apollo.MutationHookOp
 export type SetAddressDefaultMutationHookResult = ReturnType<typeof useSetAddressDefaultMutation>;
 export type SetAddressDefaultMutationResult = Apollo.MutationResult<SetAddressDefaultMutation>;
 export type SetAddressDefaultMutationOptions = Apollo.BaseMutationOptions<SetAddressDefaultMutation, SetAddressDefaultMutationVariables>;
+export const DeleteitemDocument = gql`
+    mutation Deleteitem($checkoutToken: UUID!, $variantId: ID!) {
+  checkoutLineDelete(token: $checkoutToken, lineId: $variantId) {
+    checkout {
+      lines {
+        id
+        variant {
+          id
+        }
+        quantity
+      }
+    }
+    errors {
+      field
+      message
+    }
+  }
+}
+    `;
+export type DeleteitemMutationFn = Apollo.MutationFunction<DeleteitemMutation, DeleteitemMutationVariables>;
+
+/**
+ * __useDeleteitemMutation__
+ *
+ * To run a mutation, you first call `useDeleteitemMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteitemMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteitemMutation, { data, loading, error }] = useDeleteitemMutation({
+ *   variables: {
+ *      checkoutToken: // value for 'checkoutToken'
+ *      variantId: // value for 'variantId'
+ *   },
+ * });
+ */
+export function useDeleteitemMutation(baseOptions?: Apollo.MutationHookOptions<DeleteitemMutation, DeleteitemMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteitemMutation, DeleteitemMutationVariables>(DeleteitemDocument, options);
+      }
+export type DeleteitemMutationHookResult = ReturnType<typeof useDeleteitemMutation>;
+export type DeleteitemMutationResult = Apollo.MutationResult<DeleteitemMutation>;
+export type DeleteitemMutationOptions = Apollo.BaseMutationOptions<DeleteitemMutation, DeleteitemMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($email: String!, $password: String!) {
   tokenCreate(email: $email, password: $password) {
@@ -29001,6 +29069,90 @@ export function useTestMutation(baseOptions?: Apollo.MutationHookOptions<TestMut
 export type TestMutationHookResult = ReturnType<typeof useTestMutation>;
 export type TestMutationResult = Apollo.MutationResult<TestMutation>;
 export type TestMutationOptions = Apollo.BaseMutationOptions<TestMutation, TestMutationVariables>;
+export const UpdateitemDocument = gql`
+    mutation Updateitem($checkoutToken: UUID!, $variantId: ID!, $quantity: Int) {
+  checkoutLinesUpdate(
+    token: $checkoutToken
+    lines: [{quantity: $quantity, variantId: $variantId}]
+  ) {
+    checkout {
+      lines {
+        id
+        variant {
+          id
+        }
+        quantity
+      }
+    }
+    errors {
+      field
+      message
+    }
+  }
+}
+    `;
+export type UpdateitemMutationFn = Apollo.MutationFunction<UpdateitemMutation, UpdateitemMutationVariables>;
+
+/**
+ * __useUpdateitemMutation__
+ *
+ * To run a mutation, you first call `useUpdateitemMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateitemMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateitemMutation, { data, loading, error }] = useUpdateitemMutation({
+ *   variables: {
+ *      checkoutToken: // value for 'checkoutToken'
+ *      variantId: // value for 'variantId'
+ *      quantity: // value for 'quantity'
+ *   },
+ * });
+ */
+export function useUpdateitemMutation(baseOptions?: Apollo.MutationHookOptions<UpdateitemMutation, UpdateitemMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateitemMutation, UpdateitemMutationVariables>(UpdateitemDocument, options);
+      }
+export type UpdateitemMutationHookResult = ReturnType<typeof useUpdateitemMutation>;
+export type UpdateitemMutationResult = Apollo.MutationResult<UpdateitemMutation>;
+export type UpdateitemMutationOptions = Apollo.BaseMutationOptions<UpdateitemMutation, UpdateitemMutationVariables>;
+export const AboutPageDocument = gql`
+    query AboutPage {
+  page(slug: "test-title-for-about") {
+    content
+  }
+}
+    `;
+
+/**
+ * __useAboutPageQuery__
+ *
+ * To run a query within a React component, call `useAboutPageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAboutPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAboutPageQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAboutPageQuery(baseOptions?: Apollo.QueryHookOptions<AboutPageQuery, AboutPageQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AboutPageQuery, AboutPageQueryVariables>(AboutPageDocument, options);
+      }
+export function useAboutPageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AboutPageQuery, AboutPageQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AboutPageQuery, AboutPageQueryVariables>(AboutPageDocument, options);
+        }
+export type AboutPageQueryHookResult = ReturnType<typeof useAboutPageQuery>;
+export type AboutPageLazyQueryHookResult = ReturnType<typeof useAboutPageLazyQuery>;
+export type AboutPageQueryResult = Apollo.QueryResult<AboutPageQuery, AboutPageQueryVariables>;
 export const AvailableShippingMethodsDocument = gql`
     query AvailableShippingMethods($channel: String!, $locale: LanguageCodeEnum!) {
   shop {
@@ -29790,6 +29942,7 @@ export const ProductByIdDocument = gql`
     variants {
       id
       name
+      quantityAvailable
       pricing {
         price {
           gross {

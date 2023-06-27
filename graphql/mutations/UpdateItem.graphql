@@ -1,0 +1,20 @@
+mutation Updateitem ($checkoutToken: UUID!, $variantId: ID!,$quantity: Int){
+  checkoutLinesUpdate(
+    token: $checkoutToken
+    lines: [{ quantity: $quantity, variantId: $variantId }]
+  ) {
+    checkout {
+      lines {
+        id
+        variant {
+          id
+        }
+        quantity
+      }
+    }
+    errors {
+      field
+      message
+    }
+  }
+}

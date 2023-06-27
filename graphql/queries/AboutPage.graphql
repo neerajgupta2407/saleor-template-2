@@ -1,0 +1,5 @@
+query AboutPage{
+  page(slug: "test-title-for-about") {
+    content
+  }
+}

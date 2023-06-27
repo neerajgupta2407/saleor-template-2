@@ -4,6 +4,7 @@ import { useLocalStorage } from 'react-use';
 import { useCheckoutFetchByTokenQuery } from "@/saleor/api";
 import CheckoutForm from '@/components/CheckoutForm';
 import Router from 'next/router'
+import Header from '@/components/Header';
 
 
 const Checkout = () => {
@@ -23,6 +24,7 @@ const Checkout = () => {
   // const products = data.checkout?.lines || [];
 
   return (
+    <>
     <main className="w-screen max-w-7xl md:px-8 md:mx-auto overflow-hidden flex md:flex-row flex-col justify-between">
         <div className="md:w-1/2 w-full">
           <CheckoutForm products = {products}/>
@@ -31,7 +33,7 @@ const Checkout = () => {
           <CheckoutSidebar products = {products}/>
         </div>
       </main>
-
+    </>
   );
 };
 

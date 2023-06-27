@@ -19,7 +19,7 @@ function CheckoutSidebar(){
   return (
     <div className="bg-white rounded-md p-4">
       <h2 className="text-lg font-semibold mb-4">Order Summary</h2>
-      <ul className="divide-y divide-gray-300">
+      <ul className="divide-y divide-gray-300 list-none">
         {products.map((item) => (
           <li key={item.id} className="py-2">
             <div className="flex justify-between items-center">

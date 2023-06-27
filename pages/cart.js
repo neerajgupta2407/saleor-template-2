@@ -8,7 +8,15 @@ import { useCheckoutFetchByTokenQuery } from "@/saleor/api";
 import { makePaymentRequest } from "@/utils/api";
 import { useLocalStorage } from "react-use";
 import Router from "next/router";
-
+import Header from "@/components/Header";
+import {
+  AiOutlineLeft,
+  AiOutlineMinus,
+  AiOutlinePlus,
+  AiOutlineShopping,
+} from "react-icons/ai";
+import { TiDeleteOutline } from "react-icons/ti";
+import { Button } from "react-bootstrap";
 const Cart = () => {
   const [token] = useLocalStorage("token");
   const { data, loading, error } = useCheckoutFetchByTokenQuery({
@@ -20,7 +28,9 @@ const Cart = () => {
 
   const products = data?.checkout?.lines || [];
   console.log(products);
-  localStorage.setItem("products",  JSON.stringify(products))
+  if (typeof window !== "undefined") {
+    localStorage.setItem("products", JSON.stringify(products));
+  }
 
   //   const [lzoading, setLzoading] = useState(false);
   //   const { cartItems } = useSelector((state) => state.cart);
@@ -31,96 +41,94 @@ const Cart = () => {
 
   const handlePayment = async () => {
     Router.push(
-        { pathname: "/checkout", query: { data : JSON.stringify(products) } },
-        "/checkout"
-      );
+      { pathname: "/checkout", query: { data: JSON.stringify(products) } },
+      "/checkout"
+    );
   };
 
   return (
-    <div className="w-full md:py-20">
-      <Wrapper>
-        {products.length > 0 && (
-          <>
-            {/* HEADING AND PARAGRAPH START */}
-            <div className="text-center max-w-[800px] mx-auto mt-8 md:mt-0">
-              <div className="text-[28px] md:text-[34px] mb-5 font-semibold leading-tight">
-                Shopping Cart
-              </div>
-            </div>
-            {/* HEADING AND PARAGRAPH END */}
+    <div className="cart-wrapper">
+      <div className="cart-container">
+        <button type="button" className="cart-heading">
+          <AiOutlineLeft />
+          <span className="heading">Your Cart</span>
+          <span className="cart-num-items"> items</span>
+        </button>
 
-            {/* CART CONTENT START */}
-            <div className="flex flex-col lg:flex-row gap-12 py-10">
-              {/* CART ITEMS START */}
-              <div className="flex-[2]">
-                <div className="text-lg font-bold">Cart Items</div>
-                {products.map((item) => (
-                  <CartItem key={item.id} data={item} />
-                ))}
-              </div>
-              {/* CART ITEMS END */}
-
-              {/* SUMMARY START */}
-              <div className="flex-[1]">
-                <div className="text-lg font-bold">Summary</div>
-
-                <div className="p-5 my-5 bg-black/[0.05] rounded-xl">
-                  <div className="flex justify-between">
-                    <div className="uppercase text-md md:text-lg font-medium text-black">
-                      Subtotal
-                    </div>
-                    {/* <div className="text-md md:text-lg font-medium text-black">
-                      &#8377;{subTotal}
-                    </div> */}
-                  </div>
-                  <div className="text-sm md:text-md py-5 border-t mt-5">
-                    The subtotal reflects the total price of your order,
-                    including duties and taxes, before any applicable discounts.
-                    It does not include delivery costs and international
-                    transaction fees.
-                  </div>
-                </div>
-
-                {/* BUTTON START */}
-                <button
-                  className="w-full py-4 rounded-full bg-black text-white text-lg font-medium transition-transform active:scale-95 mb-3 hover:opacity-75 flex items-center gap-2 justify-center"
-                  onClick={handlePayment}
-                >
-                  Checkout
-                  {/* {lzoading && <img src="/spinner.svg" />} */}
-                </button>
-                {/* BUTTON END */}
-              </div>
-              {/* SUMMARY END */}
-            </div>
-            {/* CART CONTENT END */}
-          </>
-        )}
-
-        {/* This is empty screen */}
         {products.length < 1 && (
-          <div className="flex-[2] flex flex-col items-center pb-[50px] md:-mt-14">
-            <Image
-              src="/empty-cart.jpg"
-              width={300}
-              height={300}
-              className="w-[300px] md:w-[400px]"
-            />
-            <span className="text-xl font-bold">Your cart is empty</span>
-            <span className="text-center mt-4">
-              Looks like you have not added anything in your cart.
-              <br />
-              Go ahead and explore top categories.
-            </span>
-            <Link
-              href="/"
-              className="py-4 px-8 rounded-full bg-black text-white text-lg font-medium transition-transform active:scale-95 mb-3 hover:opacity-75 mt-8"
-            >
-              Continue Shopping
+          <div className="empty-cart">
+            <AiOutlineShopping size={150} />
+            <h3>Your shopping bag is empty</h3>
+            <Link href="/">
+              <button
+                type="button"
+                // onClick={() => setShowCart(false)}
+                className="btn"
+              >
+                Continue Shopping
+              </button>
             </Link>
           </div>
         )}
-      </Wrapper>
+
+        <div className="product-container">
+          {products.length >= 1 &&
+            products.map((product) => (
+              <div className="product" key="">
+                <img
+                  loader={product?.variant?.product?.thumbnail?.url}
+                  src={product?.variant?.product?.thumbnail?.url}
+                  className="cart-product-image"
+                />
+                {console.log(product?.variant?.product?.thumbnail?.url)}
+                <div className="item-desc">
+                  <div className="flex top mb-30">
+                    <h5>{product?.variant?.product?.name}</h5>
+                  </div>
+                  <h4>
+                    MRP : &#8377;
+                    {product?.variant?.pricing?.price?.gross?.amount}
+                  </h4>
+                  <div className="flex bottom">
+                    <div>
+                      <p className="quantity-desc">
+                        <span className="minus">
+                          <AiOutlineMinus />
+                        </span>
+                        <span className="num" onClick="">
+                          quantity
+                        </span>
+                        <span className="plus">
+                          <AiOutlinePlus />
+                        </span>
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      className="remove-item"
+                      // onClick={() => onRemove(item)}
+                    >
+                      <TiDeleteOutline />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+        </div>
+        {products.length >= 1 && (
+          <div className="container">
+            <div className="total">
+              <h3>Subtotal:</h3>
+              <h3>$</h3>
+            </div>
+            <div className="btn-container">
+              <button type="button" className="btn" onClick={handlePayment}>
+                Pay with Card
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

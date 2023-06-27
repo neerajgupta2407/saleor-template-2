@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import store from "@/store/store";
 
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
+import Layout from "@/components/Layout";
 
 const client = new ApolloClient({
   uri: "https://shop-api.algomock.in/graphql/",
@@ -35,9 +36,9 @@ export default function App({ Component, pageProps }) {
           />
         </Head>
         <Provider store={store}>
-          <Header />
+          <Layout>
           <Component {...pageProps} />
-          <Footer />
+          </Layout>
         </Provider>
       </ApolloProvider>
     </>

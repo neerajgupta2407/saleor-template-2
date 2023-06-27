@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Router from "next/router";
 
 function CheckoutForm() {
-  const products = JSON.parse(localStorage.getItem("products"))
+  const products = JSON.parse(localStorage.getItem("products"));
   const initialCheckoutValues = {
     email: "",
     variantId: "",
@@ -56,39 +56,39 @@ function CheckoutForm() {
     // });
     // const ctoken = result?.data?.checkoutCreate?.checkout?.token;
 
-    
-      // Perform the mutation
-      const mutationResult = await checkoutCreate({
-          variables: {
-            email: values.email,
-            variantId: products[0]?.variant?.id,
-            quantity: 1,
-            firstName: values.firstName,
-            lastName: values.lastName,
-            streetAddress1: values.streetAddress1,
-            city: values.city,
-            postalCode: values.postalCode,
-            country: "IN",
-            countryArea: "delhi",
-          },
-        });
-  
-      // Extract the necessary data from the mutation result
-      const ctoken = mutationResult?.data?.checkoutCreate?.checkout?.token;
-      console.log(ctoken)
+    // Perform the mutation
+    const mutationResult = await checkoutCreate({
+      variables: {
+        email: values.email,
+        variantId: products[0]?.variant?.id,
+        quantity: 1,
+        firstName: values.firstName,
+        lastName: values.lastName,
+        streetAddress1: values.streetAddress1,
+        city: values.city,
+        postalCode: values.postalCode,
+        country: "IN",
+        countryArea: "delhi",
+      },
+    });
 
-      if(ctoken){
+    // Extract the necessary data from the mutation result
+    const ctoken = mutationResult?.data?.checkoutCreate?.checkout?.token;
+    console.log(ctoken);
 
-      localStorage.setItem("ctoken",ctoken)
+    if (ctoken) {
+      localStorage.setItem("ctoken", ctoken);
 
       Router.push(
-        { pathname: "/shippingmethod", query: { data : JSON.stringify(ctoken) } },
+        {
+          pathname: "/shippingmethod",
+          query: { data: JSON.stringify(ctoken) },
+        },
         "/shippingmethod"
       );
-      }
-
+    }
   };
-  
+
   return (
     <div>
       <div className=" min-h-screen flex items-center justify-center">
@@ -201,7 +201,7 @@ function CheckoutForm() {
               <p className="text-gray-600">Total: $99.99</p>
               <button
                 onClick={handleButtonClick}
-                className="bg-indigo-500 text-white px-6 py-2 rounded-md hover:bg-indigo-600"
+                className="bg-[#f02d34] text-white px-6 py-2 rounded-md hover:bg-[#f02d34] border-none"
               >
                 Place Order
               </button>

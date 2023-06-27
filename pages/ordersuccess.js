@@ -3,6 +3,7 @@ import {useOrdercompleteMutation } from '@/saleor/api';
 import Router from "next/router";
 import {AiFillCheckCircle} from "react-icons/ai" ;
 import Link from 'next/link';
+import Header from '@/components/Header';
 
  function ordersuccess() {
     const [checkoutComplete] = useOrdercompleteMutation();
@@ -35,7 +36,7 @@ import Link from 'next/link';
 
 console.log(myValue)
   return (
-
+    <>
     <div>
       {myValue  && <div className="flex flex-col items-center justify-center h-screen">
       <AiFillCheckCircle className="text-green-500 text-6xl mb-4" />
@@ -46,7 +47,7 @@ console.log(myValue)
                     </Link>
       </div> }
     </div>
-    
+    </>
   )
 }
 

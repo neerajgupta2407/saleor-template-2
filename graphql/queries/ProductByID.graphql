@@ -12,6 +12,7 @@ query ProductByID($id: ID!) {
     variants {
       id
       name
+      quantityAvailable
       pricing {
         price {
           gross {

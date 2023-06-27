@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoMdHeartEmpty } from "react-icons/io";
 import Wrapper from "@/components/Wrapper";
 import ProductDetailsCarousel from "@/components/ProductDetailsCarousel";
@@ -7,15 +7,27 @@ import ReactMarkdown from "react-markdown";
 import { useSelector, useDispatch } from "react-redux";
 import { addToCart } from "@/store/cartSlice";
 import { useRouter } from "next/router";
+
 import {
   useProductByIdQuery,
   useProductAddVariantToCartMutation,
+  useProductFilterByNameQuery,
 } from "@/saleor/api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Router from "next/router";
+import {
+  AiOutlineMinus,
+  AiOutlinePlus,
+  AiFillStar,
+  AiOutlineStar,
+} from "react-icons/ai";
 
 import { useLocalStorage } from "react-use";
+import Header from "@/components/Header";
+import Image from "next/image";
+import Product from "@/components/Product";
+import Link from "next/link";
 
 const ProductDetails = () => {
   const [token] = useLocalStorage("token");
@@ -31,20 +43,21 @@ const ProductDetails = () => {
   const queryVariant = process.browser
     ? router.query.variant?.toString()
     : undefined;
+
   const selectedVariantID = queryVariant || product?.variants[0].id;
+  var pl = 0;
 
-  console.log(selectedVariantID);
-  localStorage.setItem("selectedVariantID",selectedVariantID)
-
-  const selectedVariant = product?.variants.find(
-    (variant) => variant?.id === selectedVariantID
-  );
-
-  console.log(token);
   const onAddToCart = async () => {
-    await addProductToCart({
+    const { data, loading, error } = await addProductToCart({
       variables: { checkoutToken: token, variantId: selectedVariantID },
     });
+    pl++;
+    console.log("pl", pl);
+    localStorage.setItem("productsL", pl);
+    localStorage.setItem(
+      "lineid",
+      data?.checkoutLinesAdd?.checkout?.lines[0]?.id
+    );
   };
 
   const [selectedSize, setSelectedSize] = useState();
@@ -52,12 +65,8 @@ const ProductDetails = () => {
 
   const [isSelected, setIsSelected] = useState(false);
 
-  const handleClick = () => {
-    setIsSelected(!isSelected);
-  };
-
-  const notify = () => {
-    toast.success("Success. Check your cart!", {
+  const notify = (message, isSuccess) => {
+    toast[isSuccess ? "success" : "error"](message, {
       position: "bottom-right",
       autoClose: 5000,
       hideProgressBar: false,
@@ -66,11 +75,14 @@ const ProductDetails = () => {
       draggable: true,
       progress: undefined,
       theme: "dark",
+      toastClassName: isSuccess ? "toast-success" : "toast-error",
     });
   };
 
+  const [selectedVariant, setSelectedVariant] = useState(null);
+
   const buttonStyle = {
-    backgroundColor: isSelected ? "black" : "grey",
+    backgroundColor: "grey",
     color: "white",
     padding: "10px 20px",
     border: "none",
@@ -78,148 +90,155 @@ const ProductDetails = () => {
     cursor: "pointer",
   };
 
+  const selectedButtonStyle = {
+    backgroundColor: "black",
+    color: "white",
+    padding: "10px 20px",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer",
+  };
+
+  const handleClick = (variant) => {
+    setSelectedVariant(variant);
+    setIsSelected(!isSelected);
+  };
+
+  const getproducts = () => {
+    const { data } = useProductFilterByNameQuery({
+      variables: {
+        filter: {},
+      },
+    });
+    return data?.products?.edges;
+  };
+
+  const products = getproducts();
+  console.log(products);
+
+  const myLoader = ({ src }) => {
+    return product?.media[0]?.url;
+  };
+
+  const [qty, setQty] = useState(1);
+
+  const incQty = () => {
+    setQty((prevQty) => prevQty + 1);
+  };
+
+  const decQty = () => {
+    setQty((prevQty) => {
+      if (prevQty - 1 < 1) return 1;
+
+      return prevQty - 1;
+    });
+  };
+
+  const [showCart, setShowCart] = useState(false);
+
+  const handlebuy = () => {
+    setShowCart(true);
+  };
+
+  const handleBuyNow = () => {
+    router.push(
+      {
+        pathname: "/shippingmethod",
+        query: { data: JSON.stringify(ctoken) },
+      },
+      "/shippingmethod"
+    );
+
+  }
+
   return (
-    <div className="w-full md:py-20">
-      <ToastContainer />
-      <Wrapper>
-        <div className="flex flex-col lg:flex-row md:px-10 gap-[50px] lg:gap-[100px]">
-          {/* left column start */}
-          <div className="w-full md:w-auto flex-[1.5] max-w-[500px] lg:max-w-full mx-auto lg:mx-0">
-            <ProductDetailsCarousel images={product} />
+    <div>
+      <div className="product-detail-container">
+        <ToastContainer />
+        <div>
+          <div className="image-container">
+            <Image
+              src={product?.media[0]?.url}
+              loader={myLoader}
+              width={250}
+              height={250}
+              className="product-detail-image"
+            />
           </div>
-          {/* left column end */}
+          <div className="small-images-container">
+            {/* {image?.map((item, i) => (
+              <img 
+                key={i}
+                src={"d"}
+                className={i === index ? 'small-image selected-image' : 'small-image'}
+                onMouseEnter={() => setIndex(i)}
+              />
+            ))} */}
+          </div>
+        </div>
 
-          {/* right column start */}
-          <div className="flex-[1] py-3">
-            {/* PRODUCT TITLE */}
-            <div className="text-[34px] font-semibold mb-2 leading-tight">
-              {product?.name}
+        <div className="product-detail-desc">
+          <h1>{product?.name}</h1>
+          <div className="reviews">
+            <div>
+              <AiFillStar />
+              <AiFillStar />
+              <AiFillStar />
+              <AiFillStar />
+              <AiOutlineStar />
             </div>
-
-            {/* PRODUCT SUBTITLE */}
-            <div className="text-lg font-semibold mb-5">
-              {product?.category?.name}
-            </div>
-
-            {/* PRODUCT PRICE */}
-            <div className="flex items-center">
-              <p className="mr-2 text-lg font-semibold">
-                MRP : &#8377;
-                {product?.variants[0]?.pricing?.price?.gross?.amount}
-              </p>
-              {product?.variants[0]?.pricing?.price?.gross?.amount && (
-                <>
-                  <p className="text-base  font-medium line-through">
-                    &#8377;{product?.variants[0]?.pricing?.price?.gross?.amount}
-                  </p>
-                  <p className="ml-auto text-base font-medium text-green-500">
-                    {getDiscountedPricePercentage(
-                      product?.variants[0]?.pricing?.price?.gross?.amount,
-                      product?.variants[0]?.pricing?.price?.gross?.amount
-                    )}
-                    % off
-                  </p>
-                </>
-              )}
-            </div>
-
-            <div className="text-md font-medium text-black/[0.5]">
-              incl. of taxes
-            </div>
-            <div className="text-md font-medium text-black/[0.5] mb-20">
-              {`(Also includes all applicable duties)`}
-            </div>
-
-            {/* PRODUCT SIZE RANGE START */}
-            <div className="mb-10">
-              {/* HEADING START */}
-              <div className="flex justify-between mb-2">
-                <div className="text-md font-semibold">Select Model</div>
-                <div className="text-md font-medium text-black/[0.5] cursor-pointer">
-                  Select Guide
-                </div>
-              </div>
-              {/* HEADING END */}
-
-              {/* SIZE START */}
-              <div id="sizesGrid" className="grid grid-cols-3 gap-2">
-                {product?.variants?.map((variant) => (
-                  <div
-                    key={variant?.id}
-                    style={buttonStyle}
-                    onClick={handleClick}
-                  >
-                    {variant.name}
-                  </div>
-                ))}
-              </div>
-              {/* SIZE END */}
-
-              {/* SHOW ERROR START */}
-              {showError && (
-                <div className="text-red-600 mt-1">
-                  Size selection is required
-                </div>
-              )}
-              {/* SHOW ERROR END */}
-            </div>
-            {/* PRODUCT SIZE RANGE END */}
-
-            {/* ADD TO CART BUTTON START */}
-            {/* <button
-              className="w-full py-4 rounded-full bg-black text-white text-lg font-medium transition-transform active:scale-95 mb-3 hover:opacity-75"
+            <p>(20)</p>
+          </div>
+          <h4>Details: </h4>
+          <p>{product?.category?.name}</p>
+          <p className="price">
+            &#8377;
+            {product?.variants[0]?.pricing?.price?.gross?.amount}
+          </p>
+          <div className="quantity">
+            <h3>Quantity:</h3>
+            <p className="quantity-desc">
+              <span className="minus" onClick={decQty}>
+                <AiOutlineMinus />
+              </span>
+              <span className="num">{qty}</span>
+              <span className="plus" onClick={incQty}>
+                <AiOutlinePlus />
+              </span>
+            </p>
+            <span className="num">
+              {" "}
+              Quantity Available : {product?.variants[0]?.quantityAvailable}
+            </span>
+          </div>
+          <div className="buttons">
+            <button
+              type="button"
+              className="add-to-cart"
               onClick={() => {
-                if (!selectedSize) {
-                  setShowError(true);
-                  document.getElementById("sizesGrid").scrollIntoView({
-                    block: "center",
-                    behavior: "smooth",
-                  });
-                } else {
-                  onAddToCart();
-                  notify();
-                }
+                notify("Success", true);
+                onAddToCart();
               }}
             >
               Add to Cart
-            </button> */}
-            {isSelected ? (
-              <button
-                className="w-full py-4 rounded-full bg-black text-white text-lg font-medium transition-transform active:scale-95 mb-3 hover:opacity-75"
-                onClick={() => {
-                  onAddToCart();
-                  notify();
-                }}
-              >
-                Add to Cart
-              </button>
-            ) : (
-              <p style={{ color: "red" }}>Please select.</p>
-            )}
-            {error && (
-              <p style={{ color: "red" }}>Error: Button not selected.</p>
-            )}
-            {/* ADD TO CART BUTTON END */}
-
-            {/* WHISHLIST BUTTON START */}
-            <button className="w-full py-4 rounded-full border border-black text-lg font-medium transition-transform active:scale-95 flex items-center justify-center gap-2 hover:opacity-75 mb-10">
-              Whishlist
-              <IoMdHeartEmpty size={20} />
             </button>
-            {/* WHISHLIST BUTTON END */}
-
-            <div>
-              <div className="text-lg font-bold mb-5">Product Details</div>
-              <div className="markdown text-md mb-5">
-                <ReactMarkdown>{product?.description}</ReactMarkdown>
-              </div>
-            </div>
+            <button type="button" className="buy-now" onClick={handleBuyNow}>
+              Buy Now
+            </button>
           </div>
-          {/* right column end */}
         </div>
+      </div>
 
-        {/* <RelatedProducts products={products} /> */}
-      </Wrapper>
+      <div className="maylike-products-wrapper">
+        <h2>You may also like</h2>
+        <div className="marquee">
+          <div className="maylike-products-container track">
+            {products.map((product) => (
+              <Product idd={product?.node} />
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

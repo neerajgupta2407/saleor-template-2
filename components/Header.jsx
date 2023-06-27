@@ -44,17 +44,32 @@ const Header = ({ isLoggedIn }) => {
   }, [lastScrollY]);
 
   const [hasToken, setHasToken] = useState(false);
+  const [pL, setPl] = useState(0);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const token = window.localStorage.getItem("accessToken");
-      setHasToken(!!token);
+      const productsl = window.localStorage.getItem("pl");
+      if(token)
+      {
+      setHasToken(true);
+      }
+      if(productsl !== null)
+      {
+      setPl(productsl);
+      }
+
+      console.log(pL)
+
     }
-  }, []);
-  console.log(hasToken)
+  },[]);
+
+  // console.log(hasToken)
+  
 
   // useEffect(() => {
-  //     fetchCategories();
+  //     console.log(hasToken)
+  //     console.log(pL)
   // }, []);
 
   // const fetchCategories = async () => {
@@ -100,9 +115,9 @@ const Header = ({ isLoggedIn }) => {
           <Link href="/cart">
             <div className="w-8 md:w-12 h-8 md:h-12 rounded-full flex justify-center items-center hover:bg-black/[0.05] cursor-pointer relative">
               <BsCart className="text-[15px] md:text-[20px]" />
-              {cartItems.length > 0 && (
+              {pL > 0 && (
                 <div className="h-[14px] md:h-[18px] min-w-[14px] md:min-w-[18px] rounded-full bg-red-600 absolute top-1 left-5 md:left-7 text-white text-[10px] md:text-[12px] flex justify-center items-center px-[2px] md:px-[5px]">
-                  {cartItems.length}
+                  {pL}
                 </div>
               )}
             </div>
@@ -111,7 +126,18 @@ const Header = ({ isLoggedIn }) => {
 
           {/* Icon start */}
           <>
-            {hasToken  ? (
+          {console.log("ab",hasToken)}
+          {hasToken && <Link href="/logout">
+                <div className="w-8 md:w-12 h-8 md:h-12 rounded-full flex justify-center items-center hover:bg-black/[0.05] cursor-pointer relative">
+                  <BiUserCircle className="text-[15px] md:text-[20px]" />
+                </div>
+              </Link> }
+          {!hasToken &&  <Link href="/register">
+                <div className="w-8 md:w-12 h-8 md:h-12 rounded-full flex justify-center items-center hover:bg-black/[0.05] cursor-pointer relative">
+                  <AiOutlineUser className="text-[15px] md:text-[20px]" />
+                </div>
+              </Link> }
+            {/* {hasToken  ? (
               // Token exists, render the link for the authenticated user
               <Link href="/logout">
                 <div className="w-8 md:w-12 h-8 md:h-12 rounded-full flex justify-center items-center hover:bg-black/[0.05] cursor-pointer relative">
@@ -125,7 +151,7 @@ const Header = ({ isLoggedIn }) => {
                   <AiOutlineUser className="text-[15px] md:text-[20px]" />
                 </div>
               </Link>
-            )}
+            )} */}
           </>
           {/* Icon end */}
 

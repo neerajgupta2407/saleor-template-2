@@ -1,11 +1,18 @@
+"use client";
+
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { updateCart, removeFromCart } from "@/store/cartSlice";
 import { useDispatch } from "react-redux";
+import { useDeleteitemMutation, useUpdateitemMutation } from "@/saleor/api";
+
+import { useLocalStorage } from "react-use";
+import Router from "next/router";
 const CartItem = ({ data }) => {
+  console.log(data)
   const p = data?.variant;
-  console.log(p);
+  console.log(p?.id);
   const myLoader = ({ src }) => {
     return p?.product?.thumbnail?.url;
   };
@@ -18,6 +25,30 @@ const CartItem = ({ data }) => {
       id: data.id,
     };
     dispatch(updateCart(payload));
+  };
+  const [token] = useLocalStorage("token");
+  const lineid = localStorage.getItem("lineid");
+  const [checkoutLineDelete] = useDeleteitemMutation();
+
+  const handledelete = () => {
+    checkoutLineDelete({
+      variables: { checkoutToken: token, variantId: lineid },
+    });
+    localStorage.setItem("productsL", 0);
+    Router.reload();
+  };
+  const [quantity, setQuantity] = useState(1); // Initial quantity is set to 1
+
+  // Handle quantity change
+  const handleQuantityChange = (event) => {
+    const [checkoutLineUpdate] = useUpdateitemMutation();
+    const newQuantity = event.target.value;
+    setQuantity(newQuantity);
+    checkoutLineUpdate({
+      variables: { checkoutToken: token, variantId: p?.id, quantity: newQuantity },
+    });
+    localStorage.setItem("productsL", 0);
+    Router.reload();
   };
 
   return (
@@ -82,22 +113,14 @@ const CartItem = ({ data }) => {
 
             <div className="flex items-center gap-1">
               <div className="font-semibold">Quantity:</div>
-              <select
-                className="hover:text-black"
-                onChange={(e) => updateCartItem(e, "quantity")}
-              >
-                {Array.from({ length: 10 }, (_, i) => i + 1).map((q, i) => {
-                  return (
-                    <option key={i} value={q} selected={data.quantity === q}>
-                      {q}
-                    </option>
-                  );
-                })}
-              </select>
+              <input
+                type="number"
+                onChange={handleQuantityChange}
+              />
             </div>
           </div>
           <RiDeleteBin6Line
-            onClick={() => dispatch(removeFromCart({ id: data.id }))}
+            onClick={handledelete}
             className="cursor-pointer text-black/[0.5] hover:text-black text-[16px] md:text-[20px]"
           />
         </div>

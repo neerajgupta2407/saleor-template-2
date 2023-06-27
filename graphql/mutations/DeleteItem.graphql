@@ -1,0 +1,20 @@
+mutation Deleteitem ($checkoutToken: UUID!, $variantId: ID!){
+  checkoutLineDelete(
+    token: $checkoutToken
+    lineId: $variantId
+  ) {
+    checkout {
+      lines {
+        id
+        variant {
+          id
+        }
+        quantity
+      }
+    }
+    errors {
+      field
+      message
+    }
+  }
+}
