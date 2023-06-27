@@ -4,6 +4,9 @@ import Router from "next/router";
 import {AiFillCheckCircle} from "react-icons/ai" ;
 import Link from 'next/link';
 import Header from '@/components/Header';
+import { BsBagCheckFill } from 'react-icons/bs';
+import { runFireworks } from '../lib/utils';
+
 
  function ordersuccess() {
     const [checkoutComplete] = useOrdercompleteMutation();
@@ -31,23 +34,32 @@ import Header from '@/components/Header';
     setMyValue(res);
 
     console.log(res)
+    runFireworks();
 }, []);
     
 
 console.log(myValue)
   return (
-    <>
-    <div>
-      {myValue  && <div className="flex flex-col items-center justify-center h-screen">
-      <AiFillCheckCircle className="text-green-500 text-6xl mb-4" />
-      <h1 className="text-4xl font-bold mb-4">Order Success!</h1>
-      <p className="text-lg">Thank you for your order.</p>
-      <Link href="/" className="font-bold mt-5">
-                        Continue Shopping
-                    </Link>
-      </div> }
+    <div className="success-wrapper">
+      <div className="success">
+        <p className="icon">
+          <BsBagCheckFill />
+        </p>
+        <h2>Thank you for your order!</h2>
+        <p className="email-msg">Check your email inbox for the receipt.</p>
+        <p className="description">
+          If you have any questions, please email
+          <a className="email" href="mailto:order@example.com">
+            order@example.com
+          </a>
+        </p>
+        <Link href="/">
+          <button type="button" width="300px" className="btn">
+            Continue Shopping
+          </button>
+        </Link>
+      </div>
     </div>
-    </>
   )
 }
 
