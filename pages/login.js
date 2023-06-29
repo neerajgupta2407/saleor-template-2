@@ -12,6 +12,7 @@ import { useLoginMutation } from "@/saleor/api";
 import AuthContext from "../context/AuthProvider";
 import Header from "@/components/Header";
 import Wrapper from "@/components/Wrapper";
+import Navbar from "@/components/Navbar";
 
 export default function Login() {
   // const {auth, setAuth} = useContext(AuthContext);
@@ -111,6 +112,7 @@ export default function Login() {
 
   return (
     <>
+    <Navbar/>
       <div
         style={{
           display: "flex",

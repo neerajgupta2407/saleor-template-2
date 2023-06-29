@@ -5,6 +5,7 @@ import CheckoutForm from "@/components/CheckoutForm";
 import CheckoutSidebar from "@/components/CheckoutSidebar";
 import Router from "next/router";
 import Header from "@/components/Header";
+import Navbar from "@/components/Navbar";
 
 const Checkout = () => {
   const products =
@@ -20,6 +21,7 @@ const Checkout = () => {
 
   return (
     <>
+    <Navbar/>
       <main className="w-screen max-w-7xl md:px-8 md:mx-auto overflow-hidden flex md:flex-row flex-col justify-between">
         <div className="md:w-1/2 w-full">
           <CheckoutForm products={products} />

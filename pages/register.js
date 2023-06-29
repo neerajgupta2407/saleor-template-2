@@ -8,6 +8,7 @@ import { useSignupMutation } from "@/saleor/api";
 import AuthContext from "../context/AuthProvider";
 import Header from "@/components/Header";
 import Wrapper from "@/components/Wrapper";
+import Navbar from "@/components/Navbar";
 
 export default function JoinOurTeam() {
   const [name, setName] = useState("");
@@ -51,6 +52,8 @@ export default function JoinOurTeam() {
   }, [hasError]);
 
   return (
+    <>
+    <Navbar/>
     <div
       style={{
         display: "flex",
@@ -118,5 +121,6 @@ export default function JoinOurTeam() {
         </div>
       </Form>
     </div>
+    </>
   );
 }

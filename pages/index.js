@@ -37,6 +37,7 @@ export default function Home({bannerData}) {
   }, []);
   return (
     <div>
+      <Navbar/>
       <HeroBanner heroBanner={bannerData.length && bannerData[0]} />
       <div className="products-heading">
         <h2>Best Seller Products</h2>

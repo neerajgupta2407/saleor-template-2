@@ -18,6 +18,7 @@ import {
 import { TiDeleteOutline } from "react-icons/ti";
 import { Button } from "react-bootstrap";
 import Productitem from "@/components/Productitem";
+import Navbar from "@/components/Navbar";
 const Cart = () => {
   const [token] = useLocalStorage("token");
   const { data, loading, error } = useCheckoutFetchByTokenQuery({
@@ -71,6 +72,8 @@ const Cart = () => {
 
 
   return (
+    <>
+    <Navbar/>
     <div className="cart-wrapper">
       <div className="cart-container">
         <button type="button" className="cart-heading">
@@ -116,6 +119,7 @@ const Cart = () => {
         )}
       </div>
     </div>
+    </>
   );
 };
 
