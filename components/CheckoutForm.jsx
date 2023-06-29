@@ -1,9 +1,11 @@
-import { useShippingMethodQuery, useTestMutation } from "@/saleor/api";
+import { useTestMutation } from "@/saleor/api";
 import React, { useState } from "react";
 import Router from "next/router";
 
 function CheckoutForm() {
+  if (typeof window !== "undefined") {
   const products = JSON.parse(localStorage.getItem("products"));
+  }
   const initialCheckoutValues = {
     email: "",
     variantId: "",
@@ -18,15 +20,7 @@ function CheckoutForm() {
   };
 
   const [values, setValues] = useState(initialCheckoutValues);
-
-  // const shippingFunc = async (ctoken) => {
-  //   const {loading, error, data } = await useShippingMethodQuery({
-  //     variables : {
-  //       'ctoken' : ctoken
-  //     }
-  //   })
-  //   console.log(data);
-  // }
+  const [savedAddresses, setSavedAddresses] = useState([]);
 
   const handleChange = (e) => {
     setValues({
@@ -37,25 +31,28 @@ function CheckoutForm() {
 
   const [checkoutCreate, { loading, error }] = useTestMutation();
 
-  const handleButtonClick = async () => {
-    // console.log(values);
-    // // Call the mutation on button click
-    // let result = await checkoutCreate({
-    //   variables: {
-    //     email: values.email,
-    //     variantId: products[0]?.variant?.id,
-    //     quantity: 1,
-    //     firstName: values.firstName,
-    //     lastName: values.lastName,
-    //     streetAddress1: values.streetAddress1,
-    //     city: values.city,
-    //     postalCode: values.postalCode,
-    //     country: "IN",
-    //     countryArea: "delhi",
-    //   },
-    // });
-    // const ctoken = result?.data?.checkoutCreate?.checkout?.token;
+  const saveButton = () => {
+    const shouldSaveAddress = window.confirm(
+      "Do you want to save this address?"
+    );
 
+    if (shouldSaveAddress) {
+      const newAddress = {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        streetAddress1: values.streetAddress1,
+        city: values.city,
+        postalCode: values.postalCode,
+        country: "IN",
+        countryArea: "delhi",
+      };
+
+      console.log(newAddress)
+
+      setSavedAddresses([...savedAddresses, newAddress]);
+    }
+  };
+  const handleButtonClick = async () => {
     // Perform the mutation
     const mutationResult = await checkoutCreate({
       variables: {
@@ -77,7 +74,10 @@ function CheckoutForm() {
     console.log(ctoken);
 
     if (ctoken) {
-      localStorage.setItem("ctoken", ctoken);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("ctoken", ctoken);
+      }
+
 
       Router.push(
         {
@@ -89,9 +89,22 @@ function CheckoutForm() {
     }
   };
 
+  const handleSelectAddress = (address) => {
+    setValues((prevValues) => ({
+      ...prevValues,
+      firstName: address.firstName || "",
+      lastName: address.lastName || "",
+      streetAddress1: address.streetAddress1 || "",
+      city: address.city || "",
+      postalCode: address.postalCode || "",
+      countryArea: address.countryArea || "",
+      country: address.country || "",
+    }));
+  };
+
   return (
     <div>
-      <div className=" min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="max-w-xl w-full px-8 py-12 bg-white rounded-md shadow-lg">
           <h1 className="text-2xl font-semibold text-gray-900 mb-6">
             Checkout
@@ -196,8 +209,13 @@ function CheckoutForm() {
                 <option value="IN">India</option>
               </select>
             </div>
-
             <div className="flex justify-between items-center">
+              <button
+                onClick={saveButton}
+                className="bg-[#f02d34] text-white px-6 py-2 rounded-md hover:bg-[#f02d34] border-none"
+              >
+                Save Address
+              </button>
               <button
                 onClick={handleButtonClick}
                 className="bg-[#f02d34] text-white px-6 py-2 rounded-md hover:bg-[#f02d34] border-none"
@@ -207,6 +225,28 @@ function CheckoutForm() {
             </div>
           </form>
         </div>
+      </div>
+      <div className="mb-8">
+        <h2 className="text-lg font-semibold mb-4">Saved Addresses</h2>
+        {savedAddresses.map((address) => (
+          <div
+            key={address.id}
+            className="flex justify-between items-center mb-2"
+          >
+            <span>
+              {address.firstName} {address.lastName}, {address.streetAddress1},{" "}
+              {address.city}, {address.postalCode}, {address.countryArea},{" "}
+              {address.country}
+            </span>
+            <button
+              type="button"
+              onClick={() => handleSelectAddress(address)}
+              className="text-blue-500"
+            >
+              Select
+            </button>
+          </div>
+        ))}
       </div>
     </div>
   );

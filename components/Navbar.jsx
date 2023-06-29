@@ -1,30 +1,63 @@
-import React from 'react';
-import Link from 'next/link';
-import { AiOutlineShopping } from 'react-icons/ai'
-import  Router  from 'next/router';
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import { AiOutlineShopping, AiOutlineUser } from "react-icons/ai";
+import Router from "next/router";
+import { BiUserCircle } from "react-icons/bi";
 
-
-const Navbar = () => {
-//   const { showCart, setShowCart, totalQuantities } = useStateContext();
-
+const Navbar = ({ iconValue }) => {
+  //   const { showCart, setShowCart, totalQuantities } = useStateContext();
+  const [hasToken, setHasToken] = useState(false);
   const handleCart = () => {
-    Router.push({ pathname: "/cart"});
-  }
+    Router.push({ pathname: "/cart" });
+  };
+  const handlelog = () => {
+    Router.push({ pathname: "/logout" });
+  };
+  const handlereg = () => {
+    Router.push({ pathname: "/register" });
+  };
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const token = window.localStorage.getItem("accessToken");
+      const productsl = window.localStorage.getItem("pl");
+      if (token) {
+        setHasToken(true);
+      }
+      if (productsl !== null) {
+        setPl(productsl);
+      }
+    }
+  }, []);
+
+  console.log(iconValue)
 
   return (
     <div className="navbar-container">
       <p className="logo">
         <Link href="/">JSM Headphones</Link>
       </p>
-      
-      <button type="button" className="cart-icon" onClick={handleCart}>
-        <AiOutlineShopping />
-        <span className="cart-item-qty"></span>
-      </button>
+
+      <div>
+        <button type="button" className="cart-icon mr-4" onClick={handleCart}>
+          <AiOutlineShopping />
+          <span className="cart-item-qty"></span>
+        </button>
+        {console.log(hasToken)}
+        {iconValue === "loggedInIcon" ? (
+          <button type="button" className="cart-icon" onClick={handlelog}>
+            <BiUserCircle className="text-[15px] md:text-[20px]" />
+          </button>
+        ) : (
+          <button type="button" className="cart-icon" onClick={handlereg}>
+            <AiOutlineUser className="text-[15px] md:text-[20px]" />
+          </button>
+        )}
+      </div>
 
       {/* {showCart && <Cart />} */}
     </div>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

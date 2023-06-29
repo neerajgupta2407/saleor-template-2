@@ -8,9 +8,10 @@ function logout() {
     localStorage.clear();
     Router.push({ pathname: "/" }, "/");
   };
+
+  
   return (
     <div>
-      <Header />
       <div className="w-full md:py-20">
         <Wrapper>
           <button onClick={handleClearLocalStorage}>Logout</button>

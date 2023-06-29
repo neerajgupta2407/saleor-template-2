@@ -1,19 +1,22 @@
-import { useUpdateitemMutation } from "@/saleor/api";
 import React, { useState, useEffect } from "react";
-import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
+import { useDeleteitemMutation, useUpdateitemMutation } from "@/saleor/api";
+import { AiOutlineMinus, AiOutlinePlus, AiOutlineShopping } from "react-icons/ai";
 import { TiDeleteOutline } from "react-icons/ti";
 import { useLocalStorage } from "react-use";
+import Link from "next/link";
 
 const Productitem = (product) => {
   const [token] = useLocalStorage("token");
   const lineid = localStorage.getItem("lineid");
   const [checkoutLineUpdate] = useUpdateitemMutation();
+  const [checkoutLineDelete] = useDeleteitemMutation();
   const [qty, setQty] = useState(product?.product.quantity);
   const vid = product?.product?.variant?.id;
+  const [showContinueShopping, setShowContinueShopping] = useState(false);
 
   useEffect(() => {
     updateMutation();
-  }, [qty]); // Run the mutation whenever 'qty' changes
+  }, [qty]);
 
   const updateMutation = () => {
     checkoutLineUpdate({
@@ -33,6 +36,33 @@ const Productitem = (product) => {
   const handlePlus = () => {
     setQty(qty + 1);
   };
+
+  const handleDelete = () => {
+    checkoutLineDelete({
+      variables: { checkoutToken: token, variantId: lineid },
+    });
+    localStorage.setItem("productsL", "0");
+    setShowContinueShopping(true);
+  };
+
+  if (showContinueShopping) {
+    return (
+      <div className="empty-cart">
+        <AiOutlineShopping size={150} />
+        <h3>Your shopping bag is empty</h3>
+        <Link href="/">
+          <button
+            type="button"
+            // onClick={() => setShowCart(false)}
+            className="btn"
+          >
+            Continue Shopping
+          </button>
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="product" key="">
@@ -65,11 +95,12 @@ const Productitem = (product) => {
               </p>
             </div>
             <button type="button" className="remove-item">
-              <TiDeleteOutline />
+              <TiDeleteOutline onClick={handleDelete} />
             </button>
           </div>
         </div>
       </div>
+      
     </div>
   );
 };

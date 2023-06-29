@@ -25,8 +25,6 @@ export default function Login() {
 
   const [success, setSuccess] = useState(false);
 
-  const { auth, setAuth } = useContext(AuthContext);
-
   const [login, { loading, error }] = useLoginMutation();
 
   const handleClick = async () => {
@@ -111,37 +109,8 @@ export default function Login() {
     }, 5000);
   }, []);
 
-  // var requestOptions = {
-  //   method: 'POST',
-  //   headers: myHeaders,
-  //   body: raw,
-  //   redirect: 'follow'
-  // };
-
-  // try{
-  //   const res = await fetch("https://stage.algomock.in/v1//auth/login", requestOptions)
-  //   const json = await res.json();
-  //   if(json.code > 202){
-  //     setHasError(true);
-  //     setErrorMessage(json.message);
-  //   }
-  //   console.log(json)
-  //   setData(json);
-
-  //   setValue(Object.values(json));
-
-  //   console.log(json.tokens.access.token);
-  //   sessionStorage.setItem("key", json.tokens.access.token);
-  //   Router.push(`/dashboard/${json.user.id}`);
-  // }
-  // catch(err){
-  //   setHasError(true);
-  //   console.log(err);
-  // }
-
   return (
     <>
-      <Header />
       <div
         style={{
           display: "flex",
@@ -168,7 +137,10 @@ export default function Login() {
               </h1>
             </div>
 
-            <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Group
+              className="form-group-width mb-3 flex justify-center"
+              controlId="formBasicEmail"
+            >
               <Form.Control
                 type="email"
                 placeholder="Enter email"
@@ -177,7 +149,10 @@ export default function Login() {
               />
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Group
+              className="form-group-width mb-3 flex justify-center"
+              controlId="formBasicPassword"
+            >
               <Form.Control
                 type="password"
                 placeholder="Password"
@@ -185,13 +160,15 @@ export default function Login() {
                 onChange={(event) => setPassword(event.target.value)}
               />
             </Form.Group>
-            <Button
-              variant="dark"
-              style={{ width: "100%" }}
-              onClick={handleClick}
-            >
-              Submit
-            </Button>
+            <div className="flex justify-center">
+              <Button
+                variant="dark"
+                className="align-middle"
+                onClick={handleClick}
+              >
+                Submit
+              </Button>
+            </div>
 
             <div style={{ textAlign: "center", marginTop: "1.5vh" }}>
               {hasError ? <p className={redText}>{errorMessage}</p> : null}

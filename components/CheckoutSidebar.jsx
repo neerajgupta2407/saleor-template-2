@@ -10,9 +10,10 @@ const styles = {
 }
 
 function CheckoutSidebar(){
-  
-  const products = JSON.parse(localStorage.getItem("products"))
-  console.log(products)
+  let products;
+  if (typeof window !== "undefined") {
+  products = JSON.parse(localStorage.getItem("products"))
+  }
 
   const totalPrice = products?.reduce(
     (total, item) => total + item.totalPrice.gross.amount * item.quantity,
@@ -21,7 +22,6 @@ function CheckoutSidebar(){
   
   return (
     <div className="bg-white rounded-md p-4">
-      <h2 className="text-lg font-semibold mb-4">Saved Adresses</h2>
       <h2 className="text-lg font-semibold mb-4">Order Summary</h2>
       <ul className="divide-y divide-gray-300 list-none">
         {products?.map((item) => (

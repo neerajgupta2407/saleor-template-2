@@ -1,10 +1,9 @@
 import React from "react";
 import Link from "next/link";
-
-import { urlFor } from "../lib/client";
 import Image from "next/image";
 
 const Product = ({ idd }) => {
+  console.log(idd)
   const myLoader = ({ src }) => {
     return idd?.thumbnail?.url;
   };

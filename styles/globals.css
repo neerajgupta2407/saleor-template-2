@@ -16,12 +16,11 @@ a {
   text-decoration: none;
 }
 
-.main-container{
-max-width: 1400px; 
-margin: auto;
-width: 100%;
-
-}
+.main-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 90%; /* Change the width value as per your requirement */
+  }
 .layout{
   padding: 10px;
 }
@@ -749,3 +748,4 @@ margin-top: 160px;
 }
 
 @tailwind utilities;
+

@@ -11,6 +11,7 @@ import Header from "@/components/Header";
 import { client } from "@/lib/client";
 import FooterBanner from "@/components/FooterBanner";
 import Product from "@/components/Product";
+import Navbar from "@/components/Navbar";
 
 export default function Home({bannerData}) {
   const { loading, error, data, fetchMore } = useProductFilterByNameQuery({

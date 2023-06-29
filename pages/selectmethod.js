@@ -1,12 +1,17 @@
-import React,{useEffect} from "react";
+import React, { useEffect } from "react";
 import { useCheckoutDeliveryMethodUpdateMutation } from "@/saleor/api";
 import Router from "next/router";
 
- function selectmethod() {
-  const ctoken = localStorage.getItem("ctoken")
-  const dID = localStorage.getItem("dID")
-  
-  const [checkoutDeliveryMethodUpdate, { loading, error }] = useCheckoutDeliveryMethodUpdateMutation();
+function SelectMethod() {
+  const ctoken =
+    typeof window !== "undefined" ? localStorage.getItem("ctoken") : null;
+  const dID =
+    typeof window !== "undefined" ? localStorage.getItem("dID") : null;
+
+  const [
+    checkoutDeliveryMethodUpdate,
+    { loading, error },
+  ] = useCheckoutDeliveryMethodUpdateMutation();
 
   useEffect(() => {
     const updateDeliveryMethod = async () => {
@@ -20,7 +25,7 @@ import Router from "next/router";
         });
         console.log("selectmethod data: ", data);
         if (data) {
-          Router.push({ pathname: "/payment"});
+          Router.push({ pathname: "/payment" });
         }
       } catch (error) {
         console.error("Error:", error);
@@ -30,8 +35,7 @@ import Router from "next/router";
     updateDeliveryMethod();
   }, []);
 
-
-  return <div></div>;
+  return null;
 }
 
-export default selectmethod;
+export default SelectMethod;

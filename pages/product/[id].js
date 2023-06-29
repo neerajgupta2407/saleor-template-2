@@ -235,7 +235,7 @@ const ProductDetails = () => {
         <h2>You may also like</h2>
         <div className="marquee">
           <div className="maylike-products-container track">
-            {products.map((product) => (
+            {products?.map((product) => (
               <Product idd={product?.node} />
             ))}
           </div>
