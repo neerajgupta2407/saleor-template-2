@@ -46,7 +46,7 @@ const ProductDetails = () => {
 
   const selectedVariantID = queryVariant || product?.variants[0].id;
   var pl = 0;
-  
+
   const [qty, setQty] = useState(1);
 
   const incQty = () => {
@@ -63,7 +63,11 @@ const ProductDetails = () => {
 
   const onAddToCart = async () => {
     const { data, loading, error } = await addProductToCart({
-      variables: { checkoutToken: token, variantId: selectedVariantID, qty: qty },
+      variables: {
+        checkoutToken: token,
+        variantId: selectedVariantID,
+        qty: qty,
+      },
     });
     pl++;
     console.log("pl", pl);
@@ -134,8 +138,6 @@ const ProductDetails = () => {
     return product?.media[0]?.url;
   };
 
-  
-
   const [showCart, setShowCart] = useState(false);
 
   const handlebuy = () => {
@@ -143,15 +145,12 @@ const ProductDetails = () => {
   };
 
   const handleBuyNow = () => {
-    router.push(
-      {
-        pathname: "/shippingmethod",
-        query: { data: JSON.stringify(ctoken) },
-      },
-      "/shippingmethod"
-    );
-
-  }
+    notify("Success", true);
+    onAddToCart();
+    router.push({
+      pathname: "/cart",
+    });
+  };
 
   return (
     <div>
