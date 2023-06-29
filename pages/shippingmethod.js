@@ -14,7 +14,9 @@ function shippingmethod() {
     },
   });
   const dID = data?.checkout?.availableCollectionPoints[0].id;
+  if (typeof window !== "undefined") {
   localStorage.setItem("dID", dID);
+  }
 
   if (dID) {
     Router.push({ pathname: "/selectmethod" }, "/selectmethod");
