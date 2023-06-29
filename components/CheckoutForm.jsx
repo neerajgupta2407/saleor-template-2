@@ -3,8 +3,9 @@ import React, { useState } from "react";
 import Router from "next/router";
 
 function CheckoutForm() {
+  let products;
   if (typeof window !== "undefined") {
-  const products = JSON.parse(localStorage.getItem("products"));
+  products = JSON.parse(localStorage.getItem("products"));
   }
   const initialCheckoutValues = {
     email: "",

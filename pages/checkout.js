@@ -20,7 +20,6 @@ const Checkout = () => {
 
   return (
     <>
-      <Header />
       <main className="w-screen max-w-7xl md:px-8 md:mx-auto overflow-hidden flex md:flex-row flex-col justify-between">
         <div className="md:w-1/2 w-full">
           <CheckoutForm products={products} />
