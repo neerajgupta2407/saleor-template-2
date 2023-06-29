@@ -28,6 +28,7 @@ import Header from "@/components/Header";
 import Image from "next/image";
 import Product from "@/components/Product";
 import Link from "next/link";
+import Navbar from "@/components/Navbar";
 
 const ProductDetails = () => {
   const [token] = useLocalStorage("token");
@@ -153,6 +154,8 @@ const ProductDetails = () => {
   };
 
   return (
+    <>
+    <Navbar/>
     <div>
       <div className="product-detail-container">
         <ToastContainer />
@@ -241,6 +244,7 @@ const ProductDetails = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
