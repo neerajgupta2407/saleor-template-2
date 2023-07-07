@@ -4,7 +4,11 @@ import Link from "next/link";
 import Wrapper from "@/components/Wrapper";
 import CartItem from "@/components/CartItem";
 import { useSelector } from "react-redux";
-import { useCheckoutFetchByTokenQuery, useDeleteitemMutation, useUpdateitemMutation } from "@/saleor/api";
+import {
+  useCheckoutFetchByTokenQuery,
+  useDeleteitemMutation,
+  useUpdateitemMutation,
+} from "@/saleor/api";
 import { makePaymentRequest } from "@/utils/api";
 import { useLocalStorage } from "react-use";
 import Router from "next/router";
@@ -20,10 +24,20 @@ import { Button } from "react-bootstrap";
 import Productitem from "@/components/Productitem";
 import Navbar from "@/components/Navbar";
 const Cart = () => {
+  let accessToken;
+  if (typeof window !== "undefined") {
+    accessToken = localStorage.getItem("accessToken");
+  }
   const [token] = useLocalStorage("token");
   const { data, loading, error } = useCheckoutFetchByTokenQuery({
     variables: { checkoutToken: token },
     skip: !token,
+    context: {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`, // Include the access token in the Authorization header
+      },
+    },
   });
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error</div>;
@@ -70,55 +84,52 @@ const Cart = () => {
     );
   };
 
-
   return (
     <>
-    <Navbar/>
-    <div className="cart-wrapper">
-      <div className="cart-container">
-        <button type="button" className="cart-heading">
-          <AiOutlineLeft />
-          <span className="heading">Your Cart</span>
-          <span className="cart-num-items"> items</span>
-        </button>
+      <Navbar />
+      <div className="cart-wrapper">
+        <div className="cart-container">
+          <button type="button" className="cart-heading">
+            <AiOutlineLeft />
+            <span className="heading">Your Cart</span>
+            <span className="cart-num-items"> items</span>
+          </button>
 
-        {products.length < 1 && (
-          <div className="empty-cart">
-            <AiOutlineShopping size={150} />
-            <h3>Your shopping bag is empty</h3>
-            <Link href="/">
-              <button
-                type="button"
-                // onClick={() => setShowCart(false)}
-                className="btn"
-              >
-                Continue Shopping
-              </button>
-            </Link>
+          {products.length < 1 && (
+            <div className="empty-cart">
+              <AiOutlineShopping size={150} />
+              <h3>Your shopping bag is empty</h3>
+              <Link href="/">
+                <button
+                  type="button"
+                  // onClick={() => setShowCart(false)}
+                  className="btn"
+                >
+                  Continue Shopping
+                </button>
+              </Link>
+            </div>
+          )}
+
+          <div className="product-container">
+            {products.length >= 1 &&
+              products.map((product) => <Productitem product={product} />)}
           </div>
-        )}
-
-        <div className="product-container">
-          {products.length >= 1 &&
-            products.map((product) => (
-              <Productitem product={product}/>
-            ))}
+          {products.length >= 1 && (
+            <div className="container">
+              <div className="total">
+                <h3>Subtotal:</h3>
+                <h3>$</h3>
+              </div>
+              <div className="btn-container">
+                <button type="button" className="btn" onClick={handlePayment}>
+                  Pay with Card
+                </button>
+              </div>
+            </div>
+          )}
         </div>
-        {products.length >= 1 && (
-          <div className="container">
-            <div className="total">
-              <h3>Subtotal:</h3>
-              <h3>$</h3>
-            </div>
-            <div className="btn-container">
-              <button type="button" className="btn" onClick={handlePayment}>
-                Pay with Card
-              </button>
-            </div>
-          </div>
-        )}
       </div>
-    </div>
     </>
   );
 };

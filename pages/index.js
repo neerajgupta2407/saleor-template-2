@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import {
   useProductFilterByNameQuery,
   useCheckoutCreateMutation,
+  useRefreshTokenMutation,
 } from "@/saleor/api";
 import Header from "@/components/Header";
 import { client } from "@/lib/client";
@@ -13,7 +14,7 @@ import FooterBanner from "@/components/FooterBanner";
 import Product from "@/components/Product";
 import Navbar from "@/components/Navbar";
 
-export default function Home({bannerData}) {
+export default function Home({ bannerData }) {
   const { loading, error, data, fetchMore } = useProductFilterByNameQuery({
     variables: {
       filter: {},
@@ -24,6 +25,20 @@ export default function Home({bannerData}) {
   const [token, setToken] = useLocalStorage("token");
 
   const [checkoutCreate, { kdata, kloading }] = useCheckoutCreateMutation();
+  const [tokenRefresh] = useRefreshTokenMutation();
+
+  async function rt(refreshToken) {
+    try {
+      const dataa = await tokenRefresh({
+        variables: {
+          refreshToken: refreshToken,
+        },
+      });
+      return dataa?.data?.tokenRefresh?.token;
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
 
   useEffect(() => {
     async function doCheckout() {
@@ -35,9 +50,33 @@ export default function Home({bannerData}) {
 
     doCheckout();
   }, []);
+
+  let refreshToken;
+
+  if (typeof window !== "undefined") {
+    refreshToken = localStorage.getItem("refreshToken");
+  }
+
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      let refreshToken;
+      if (typeof window !== "undefined") {
+        refreshToken = localStorage.getItem("refreshToken");
+      }
+      const refreshedToken = await rt(refreshToken);
+
+      localStorage.setItem("accessToken", refreshedToken);
+      console.log(refreshedToken);
+    }, 30000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [refreshToken, rt]);
+
   return (
     <div>
-      <Navbar/>
+      <Navbar />
       <HeroBanner heroBanner={bannerData.length && bannerData[0]} />
       <div className="products-heading">
         <h2>Best Seller Products</h2>
@@ -63,7 +102,6 @@ export const getServerSideProps = async () => {
   const bannerData = await client.fetch(bannerQuery);
 
   return {
-    props: { products, bannerData }
-  }
-}
-
+    props: { products, bannerData },
+  };
+};

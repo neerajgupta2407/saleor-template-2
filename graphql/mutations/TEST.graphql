@@ -1,7 +1,5 @@
 mutation test(
   $email: String!
-  $quantity: Int!
-  $variantId: ID!
   $firstName: String!
   $lastName: String!
   $streetAddress1: String!
@@ -9,12 +7,13 @@ mutation test(
   $postalCode: String!
   $country: CountryCode!
   $countryArea: String!
+  $lineItems: [CheckoutLineInput!]!
 ) {
   checkoutCreate(
     input: {
       channel: "in"
       email: $email
-      lines: [{ quantity: $quantity, variantId: $variantId }]
+      lines: $lineItems
       shippingAddress: {
         firstName: $firstName
         lastName: $lastName

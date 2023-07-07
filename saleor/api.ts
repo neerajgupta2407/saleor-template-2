@@ -27066,14 +27066,13 @@ export type AddressDeleteMutationVariables = Exact<{
 
 export type AddressDeleteMutation = { __typename?: 'Mutation', accountAddressDelete?: { __typename?: 'AccountAddressDelete', user?: { __typename?: 'User', addresses: Array<{ __typename?: 'Address', id: string, phone?: string | null, firstName: string, lastName: string, streetAddress1: string, city: string, postalCode: string, isDefaultBillingAddress?: boolean | null, isDefaultShippingAddress?: boolean | null, country: { __typename?: 'CountryDisplay', code: string, country: string } }> } | null } | null };
 
-export type AddressSetDefaultMutationVariables = Exact<{
-  addressID: Scalars['ID'];
-  userID: Scalars['ID'];
-  addressType: AddressTypeEnum;
+export type SetAddressMutationVariables = Exact<{
+  id: Scalars['ID'];
+  type: AddressTypeEnum;
 }>;
 
 
-export type AddressSetDefaultMutation = { __typename?: 'Mutation', addressSetDefault?: { __typename?: 'AddressSetDefault', errors: Array<{ __typename?: 'AccountError', field?: string | null, message?: string | null, code: AccountErrorCode }> } | null };
+export type SetAddressMutation = { __typename?: 'Mutation', accountSetDefaultAddress?: { __typename: 'AccountSetDefaultAddress', user?: { __typename: 'User', addresses: Array<{ __typename: 'Address', id: string, phone?: string | null, firstName: string, lastName: string, streetAddress1: string, city: string, postalCode: string, isDefaultBillingAddress?: boolean | null, isDefaultShippingAddress?: boolean | null, country: { __typename?: 'CountryDisplay', code: string, country: string } }> } | null, errors: Array<{ __typename: 'AccountError', code: AccountErrorCode, message?: string | null }> } | null };
 
 export type CheckoutAddProductLineMutationVariables = Exact<{
   checkoutToken: Scalars['UUID'];
@@ -27221,6 +27220,13 @@ export type ProductAddVariantToCartMutationVariables = Exact<{
 
 export type ProductAddVariantToCartMutation = { __typename?: 'Mutation', checkoutLinesAdd?: { __typename?: 'CheckoutLinesAdd', checkout?: { __typename?: 'Checkout', id: string, lines: Array<{ __typename?: 'CheckoutLine', id: string, quantity: number, variant: { __typename?: 'ProductVariant', name: string, product: { __typename?: 'Product', name: string } } }> } | null, errors: Array<{ __typename?: 'CheckoutError', message?: string | null }> } | null };
 
+export type RefreshTokenMutationVariables = Exact<{
+  refreshToken: Scalars['String'];
+}>;
+
+
+export type RefreshTokenMutation = { __typename?: 'Mutation', tokenRefresh?: { __typename?: 'RefreshToken', token?: string | null } | null };
+
 export type RegisterMutationVariables = Exact<{
   input: AccountRegisterInput;
 }>;
@@ -27247,8 +27253,6 @@ export type SignupMutation = { __typename?: 'Mutation', accountRegister?: { __ty
 
 export type TestMutationVariables = Exact<{
   email: Scalars['String'];
-  quantity: Scalars['Int'];
-  variantId: Scalars['ID'];
   firstName: Scalars['String'];
   lastName: Scalars['String'];
   streetAddress1: Scalars['String'];
@@ -27256,6 +27260,7 @@ export type TestMutationVariables = Exact<{
   postalCode: Scalars['String'];
   country: CountryCode;
   countryArea: Scalars['String'];
+  lineItems: Array<CheckoutLineInput> | CheckoutLineInput;
 }>;
 
 
@@ -28059,45 +28064,52 @@ export function useAddressDeleteMutation(baseOptions?: Apollo.MutationHookOption
 export type AddressDeleteMutationHookResult = ReturnType<typeof useAddressDeleteMutation>;
 export type AddressDeleteMutationResult = Apollo.MutationResult<AddressDeleteMutation>;
 export type AddressDeleteMutationOptions = Apollo.BaseMutationOptions<AddressDeleteMutation, AddressDeleteMutationVariables>;
-export const AddressSetDefaultDocument = gql`
-    mutation AddressSetDefault($addressID: ID!, $userID: ID!, $addressType: AddressTypeEnum!) {
-  addressSetDefault(addressId: $addressID, type: $addressType, userId: $userID) {
-    errors {
-      field
-      message
-      code
+export const SetAddressDocument = gql`
+    mutation SetAddress($id: ID!, $type: AddressTypeEnum!) {
+  accountSetDefaultAddress(id: $id, type: $type) {
+    user {
+      addresses {
+        ...AddressDetailsFragment
+        __typename
+      }
+      __typename
     }
+    errors {
+      code
+      message
+      __typename
+    }
+    __typename
   }
 }
-    `;
-export type AddressSetDefaultMutationFn = Apollo.MutationFunction<AddressSetDefaultMutation, AddressSetDefaultMutationVariables>;
+    ${AddressDetailsFragmentFragmentDoc}`;
+export type SetAddressMutationFn = Apollo.MutationFunction<SetAddressMutation, SetAddressMutationVariables>;
 
 /**
- * __useAddressSetDefaultMutation__
+ * __useSetAddressMutation__
  *
- * To run a mutation, you first call `useAddressSetDefaultMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAddressSetDefaultMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useSetAddressMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetAddressMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [addressSetDefaultMutation, { data, loading, error }] = useAddressSetDefaultMutation({
+ * const [setAddressMutation, { data, loading, error }] = useSetAddressMutation({
  *   variables: {
- *      addressID: // value for 'addressID'
- *      userID: // value for 'userID'
- *      addressType: // value for 'addressType'
+ *      id: // value for 'id'
+ *      type: // value for 'type'
  *   },
  * });
  */
-export function useAddressSetDefaultMutation(baseOptions?: Apollo.MutationHookOptions<AddressSetDefaultMutation, AddressSetDefaultMutationVariables>) {
+export function useSetAddressMutation(baseOptions?: Apollo.MutationHookOptions<SetAddressMutation, SetAddressMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<AddressSetDefaultMutation, AddressSetDefaultMutationVariables>(AddressSetDefaultDocument, options);
+        return Apollo.useMutation<SetAddressMutation, SetAddressMutationVariables>(SetAddressDocument, options);
       }
-export type AddressSetDefaultMutationHookResult = ReturnType<typeof useAddressSetDefaultMutation>;
-export type AddressSetDefaultMutationResult = Apollo.MutationResult<AddressSetDefaultMutation>;
-export type AddressSetDefaultMutationOptions = Apollo.BaseMutationOptions<AddressSetDefaultMutation, AddressSetDefaultMutationVariables>;
+export type SetAddressMutationHookResult = ReturnType<typeof useSetAddressMutation>;
+export type SetAddressMutationResult = Apollo.MutationResult<SetAddressMutation>;
+export type SetAddressMutationOptions = Apollo.BaseMutationOptions<SetAddressMutation, SetAddressMutationVariables>;
 export const CheckoutAddProductLineDocument = gql`
     mutation CheckoutAddProductLine($checkoutToken: UUID!, $variantId: ID!, $locale: LanguageCodeEnum!) {
   checkoutLinesAdd(
@@ -28868,6 +28880,39 @@ export function useProductAddVariantToCartMutation(baseOptions?: Apollo.Mutation
 export type ProductAddVariantToCartMutationHookResult = ReturnType<typeof useProductAddVariantToCartMutation>;
 export type ProductAddVariantToCartMutationResult = Apollo.MutationResult<ProductAddVariantToCartMutation>;
 export type ProductAddVariantToCartMutationOptions = Apollo.BaseMutationOptions<ProductAddVariantToCartMutation, ProductAddVariantToCartMutationVariables>;
+export const RefreshTokenDocument = gql`
+    mutation refreshToken($refreshToken: String!) {
+  tokenRefresh(refreshToken: $refreshToken) {
+    token
+  }
+}
+    `;
+export type RefreshTokenMutationFn = Apollo.MutationFunction<RefreshTokenMutation, RefreshTokenMutationVariables>;
+
+/**
+ * __useRefreshTokenMutation__
+ *
+ * To run a mutation, you first call `useRefreshTokenMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRefreshTokenMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [refreshTokenMutation, { data, loading, error }] = useRefreshTokenMutation({
+ *   variables: {
+ *      refreshToken: // value for 'refreshToken'
+ *   },
+ * });
+ */
+export function useRefreshTokenMutation(baseOptions?: Apollo.MutationHookOptions<RefreshTokenMutation, RefreshTokenMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RefreshTokenMutation, RefreshTokenMutationVariables>(RefreshTokenDocument, options);
+      }
+export type RefreshTokenMutationHookResult = ReturnType<typeof useRefreshTokenMutation>;
+export type RefreshTokenMutationResult = Apollo.MutationResult<RefreshTokenMutation>;
+export type RefreshTokenMutationOptions = Apollo.BaseMutationOptions<RefreshTokenMutation, RefreshTokenMutationVariables>;
 export const RegisterDocument = gql`
     mutation Register($input: AccountRegisterInput!) {
   accountRegister(input: $input) {
@@ -28996,9 +29041,9 @@ export type SignupMutationHookResult = ReturnType<typeof useSignupMutation>;
 export type SignupMutationResult = Apollo.MutationResult<SignupMutation>;
 export type SignupMutationOptions = Apollo.BaseMutationOptions<SignupMutation, SignupMutationVariables>;
 export const TestDocument = gql`
-    mutation test($email: String!, $quantity: Int!, $variantId: ID!, $firstName: String!, $lastName: String!, $streetAddress1: String!, $city: String!, $postalCode: String!, $country: CountryCode!, $countryArea: String!) {
+    mutation test($email: String!, $firstName: String!, $lastName: String!, $streetAddress1: String!, $city: String!, $postalCode: String!, $country: CountryCode!, $countryArea: String!, $lineItems: [CheckoutLineInput!]!) {
   checkoutCreate(
-    input: {channel: "in", email: $email, lines: [{quantity: $quantity, variantId: $variantId}], shippingAddress: {firstName: $firstName, lastName: $lastName, streetAddress1: $streetAddress1, city: $city, postalCode: $postalCode, country: $country, countryArea: $countryArea}, billingAddress: {firstName: $firstName, lastName: $lastName, streetAddress1: $streetAddress1, city: $city, postalCode: $postalCode, country: $country, countryArea: $countryArea}}
+    input: {channel: "in", email: $email, lines: $lineItems, shippingAddress: {firstName: $firstName, lastName: $lastName, streetAddress1: $streetAddress1, city: $city, postalCode: $postalCode, country: $country, countryArea: $countryArea}, billingAddress: {firstName: $firstName, lastName: $lastName, streetAddress1: $streetAddress1, city: $city, postalCode: $postalCode, country: $country, countryArea: $countryArea}}
   ) {
     checkout {
       id
@@ -29053,8 +29098,6 @@ export type TestMutationFn = Apollo.MutationFunction<TestMutation, TestMutationV
  * const [testMutation, { data, loading, error }] = useTestMutation({
  *   variables: {
  *      email: // value for 'email'
- *      quantity: // value for 'quantity'
- *      variantId: // value for 'variantId'
  *      firstName: // value for 'firstName'
  *      lastName: // value for 'lastName'
  *      streetAddress1: // value for 'streetAddress1'
@@ -29062,6 +29105,7 @@ export type TestMutationFn = Apollo.MutationFunction<TestMutation, TestMutationV
  *      postalCode: // value for 'postalCode'
  *      country: // value for 'country'
  *      countryArea: // value for 'countryArea'
+ *      lineItems: // value for 'lineItems'
  *   },
  * });
  */

@@ -1,13 +1,20 @@
-import React, { useEffect } from 'react';
-import { useCheckoutPaymentCreateMutation } from '@/saleor/api';
-import Router from 'next/router';
+import React, { useEffect } from "react";
+import { useCheckoutPaymentCreateMutation } from "@/saleor/api";
+import Router from "next/router";
 
 function Payment() {
   let ctoken;
   if (typeof window !== "undefined") {
-  ctoken = localStorage.getItem('ctoken');
+    ctoken = localStorage.getItem("ctoken");
   }
-  const [checkoutPaymentCreate, { loading, error }] = useCheckoutPaymentCreateMutation();
+  let accessToken;
+  if (typeof window !== "undefined") {
+    accessToken = localStorage.getItem("accessToken");
+  }
+  const [
+    checkoutPaymentCreate,
+    { loading, error },
+  ] = useCheckoutPaymentCreateMutation();
 
   useEffect(() => {
     const checkoutPaymentCreateMethod = async () => {
@@ -15,15 +22,21 @@ function Payment() {
         const { data } = await checkoutPaymentCreate({
           variables: {
             ctoken: ctoken,
-            locale: 'EN',
+            locale: "EN",
+          },
+          context: {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`, // Include the access token in the Authorization header
+            },
           },
         });
-        console.log('payment create data:', data);
+        console.log("payment create data:", data);
         if (data) {
-          Router.push({ pathname: '/ordersuccess' });
+          Router.push({ pathname: "/ordersuccess" });
         }
       } catch (error) {
-        console.error('Error:', error);
+        console.error("Error:", error);
         // Handle the error state here
       }
     };

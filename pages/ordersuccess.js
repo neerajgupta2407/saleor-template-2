@@ -1,30 +1,41 @@
-import React,{useEffect,useState} from 'react'
-import {useOrdercompleteMutation } from '@/saleor/api';
+import React, { useEffect, useState } from "react";
+import { useOrdercompleteMutation } from "@/saleor/api";
 import Router from "next/router";
-import {AiFillCheckCircle} from "react-icons/ai" ;
-import Link from 'next/link';
-import Header from '@/components/Header';
-import { BsBagCheckFill } from 'react-icons/bs';
-import { runFireworks } from '../lib/utils';
+import { AiFillCheckCircle } from "react-icons/ai";
+import Link from "next/link";
+import Header from "@/components/Header";
+import { BsBagCheckFill } from "react-icons/bs";
+import { runFireworks } from "../lib/utils";
 
+function ordersuccess() {
+  let accessToken;
+  if (typeof window !== "undefined") {
+    accessToken = localStorage.getItem("accessToken");
+  }
+  const [checkoutComplete] = useOrdercompleteMutation();
+  const [myValue, setMyValue] = useState("Initial Value");
+  useEffect(() => {
+    const ctoken = localStorage.getItem("ctoken");
 
- function ordersuccess() {
-    const [checkoutComplete] = useOrdercompleteMutation();
-    const [myValue, setMyValue] = useState('Initial Value');
-    useEffect(() => {
-  const ctoken = localStorage.getItem("ctoken")
-  
-    const checkoutMethod = async () => { 
+    const checkoutMethod = async () => {
       try {
         const { data } = await checkoutComplete({
           variables: {
             ctoken: ctoken,
-            locale: "EN"
-          }
+            locale: "EN",
+          },
+          context: {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`, // Include the access token in the Authorization header
+            },
+          },
         });
-        console.log("payment create data : ", data?.checkoutComplete?.order?.status);
+        console.log(
+          "payment create data : ",
+          data?.checkoutComplete?.order?.status
+        );
         return data?.checkoutComplete?.order?.status;
-        
       } catch (error) {
         console.error("Error:", error);
       }
@@ -33,12 +44,11 @@ import { runFireworks } from '../lib/utils';
     const res = checkoutMethod();
     setMyValue(res);
 
-    console.log(res)
+    console.log(res);
     runFireworks();
-}, []);
-    
+  }, []);
 
-console.log(myValue)
+  console.log(myValue);
   return (
     <div className="success-wrapper">
       <div className="success">
@@ -60,7 +70,7 @@ console.log(myValue)
         </Link>
       </div>
     </div>
-  )
+  );
 }
 
-export default ordersuccess
+export default ordersuccess;

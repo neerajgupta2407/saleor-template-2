@@ -5,7 +5,11 @@ import Router from "next/router";
 function CheckoutForm() {
   let products;
   if (typeof window !== "undefined") {
-  products = JSON.parse(localStorage.getItem("products"));
+    products = JSON.parse(localStorage.getItem("products"));
+  }
+  let accessToken;
+  if (typeof window !== "undefined") {
+    accessToken = localStorage.getItem("accessToken");
   }
   const initialCheckoutValues = {
     email: "",
@@ -48,18 +52,22 @@ function CheckoutForm() {
         countryArea: "delhi",
       };
 
-      console.log(newAddress)
+      console.log(newAddress);
 
       setSavedAddresses([...savedAddresses, newAddress]);
     }
   };
   const handleButtonClick = async () => {
     // Perform the mutation
+    
     const mutationResult = await checkoutCreate({
+      
       variables: {
         email: values.email,
-        variantId: products[0]?.variant?.id,
-        quantity: 1,
+        lineItems: products.map((product) => ({
+          variantId: product?.variant?.id,
+          quantity: product?.quantity,
+        })),
         firstName: values.firstName,
         lastName: values.lastName,
         streetAddress1: values.streetAddress1,
@@ -67,6 +75,12 @@ function CheckoutForm() {
         postalCode: values.postalCode,
         country: "IN",
         countryArea: "delhi",
+      },
+      context: {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`, // Include the access token in the Authorization header
+        },
       },
     });
 
@@ -78,7 +92,6 @@ function CheckoutForm() {
       if (typeof window !== "undefined") {
         localStorage.setItem("ctoken", ctoken);
       }
-
 
       Router.push(
         {

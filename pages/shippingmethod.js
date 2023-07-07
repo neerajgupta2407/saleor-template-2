@@ -5,17 +5,28 @@ import Router from "next/router";
 function shippingmethod() {
   let ctokenn;
   if (typeof window !== "undefined") {
-  ctokenn = localStorage.getItem("ctoken");
+    ctokenn = localStorage.getItem("ctoken");
+  }
+
+  let accessToken;
+  if (typeof window !== "undefined") {
+    accessToken = localStorage.getItem("accessToken");
   }
 
   const { loading, error, data } = useShippingMethodQuery({
     variables: {
       ctoken: ctokenn,
     },
+    context: {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`, // Include the access token in the Authorization header
+      },
+    },
   });
   const dID = data?.checkout?.availableCollectionPoints[0].id;
   if (typeof window !== "undefined") {
-  localStorage.setItem("dID", dID);
+    localStorage.setItem("dID", dID);
   }
 
   if (dID) {

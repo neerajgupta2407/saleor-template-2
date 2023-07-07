@@ -31,6 +31,10 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 
 const ProductDetails = () => {
+  let accessToken;
+  if (typeof window !== "undefined") {
+    accessToken = localStorage.getItem("accessToken");
+  }
   const [token] = useLocalStorage("token");
   const router = useRouter();
   const { id } = router.query;
@@ -40,6 +44,7 @@ const ProductDetails = () => {
   console.log(product);
 
   const [addProductToCart] = useProductAddVariantToCartMutation();
+  const [notification, setNotification] = useState("");
 
   const queryVariant = process.browser
     ? router.query.variant?.toString()
@@ -63,6 +68,11 @@ const ProductDetails = () => {
   };
 
   const onAddToCart = async () => {
+    if (!accessToken) {
+      setNotification("Please login to continue");
+    }
+    console.log(accessToken)
+    if(accessToken !== null) {
     const { data, loading, error } = await addProductToCart({
       variables: {
         checkoutToken: token,
@@ -77,6 +87,7 @@ const ProductDetails = () => {
       "lineid",
       data?.checkoutLinesAdd?.checkout?.lines[0]?.id
     );
+    }
   };
 
   const [selectedSize, setSelectedSize] = useState();
@@ -146,104 +157,98 @@ const ProductDetails = () => {
   };
 
   const handleBuyNow = () => {
+    if (!accessToken) {
+      setNotification("Please login to continue");
+    }
+    else {
     notify("Success", true);
     onAddToCart();
     router.push({
       pathname: "/cart",
     });
+  }
   };
 
   return (
     <>
-    <Navbar/>
-    <div>
-      <div className="product-detail-container">
-        <ToastContainer />
-        <div>
-          <div className="image-container">
-            <Image
-              src={product?.media[0]?.url}
-              loader={myLoader}
-              width={250}
-              height={250}
-              className="product-detail-image"
-            />
-          </div>
-          <div className="small-images-container">
-            {/* {image?.map((item, i) => (
-              <img 
-                key={i}
-                src={"d"}
-                className={i === index ? 'small-image selected-image' : 'small-image'}
-                onMouseEnter={() => setIndex(i)}
+      <Navbar />
+      <div>
+        <div className="product-detail-container">
+          <ToastContainer />
+          <div>
+            <div className="image-container">
+              <Image
+                src={product?.media[0]?.url}
+                loader={myLoader}
+                width={200}
+                height={200}
+                className="product-detail-image lg:w-20 lg:h-20 sm:w-100 sm:h-100"
               />
-            ))} */}
-          </div>
-        </div>
-
-        <div className="product-detail-desc">
-          <h1>{product?.name}</h1>
-          <div className="reviews">
-            <div>
-              <AiFillStar />
-              <AiFillStar />
-              <AiFillStar />
-              <AiFillStar />
-              <AiOutlineStar />
             </div>
-            <p>(20)</p>
           </div>
-          <h4>Details: </h4>
-          <p>{product?.category?.name}</p>
-          <p className="price">
-            &#8377;
-            {product?.variants[0]?.pricing?.price?.gross?.amount}
-          </p>
-          <div className="quantity">
-            <h3>Quantity:</h3>
-            <p className="quantity-desc">
-              <span className="minus" onClick={decQty}>
-                <AiOutlineMinus />
-              </span>
-              <span className="num">{qty}</span>
-              <span className="plus" onClick={incQty}>
-                <AiOutlinePlus />
-              </span>
-            </p>
-            <span className="num">
-              {" "}
-              Quantity Available : {product?.variants[0]?.quantityAvailable}
-            </span>
-          </div>
-          <div className="buttons">
-            <button
-              type="button"
-              className="add-to-cart"
-              onClick={() => {
-                notify("Success", true);
-                onAddToCart();
-              }}
-            >
-              Add to Cart
-            </button>
-            <button type="button" className="buy-now" onClick={handleBuyNow}>
-              Buy Now
-            </button>
-          </div>
-        </div>
-      </div>
 
-      <div className="maylike-products-wrapper">
-        <h2>You may also like</h2>
-        <div className="marquee">
-          <div className="maylike-products-container track">
-            {products?.map((product) => (
-              <Product idd={product?.node} />
-            ))}
+          <div className="product-detail-desc">
+            <h1>{product?.name}</h1>
+            <div className="reviews">
+              <div>
+                <AiFillStar />
+                <AiFillStar />
+                <AiFillStar />
+                <AiFillStar />
+                <AiOutlineStar />
+              </div>
+              <p>(20)</p>
+            </div>
+            <h4>Details: </h4>
+            <p>{product?.category?.name}</p>
+            <p className="price">
+              &#8377;
+              {product?.variants[0]?.pricing?.price?.gross?.amount}
+            </p>
+            <div className="quantity">
+              <h3>Quantity:</h3>
+              <p className="quantity-desc">
+                <span className="minus" onClick={decQty}>
+                  <AiOutlineMinus />
+                </span>
+                <span className="num">{qty}</span>
+                <span className="plus" onClick={incQty}>
+                  <AiOutlinePlus />
+                </span>
+              </p>
+            </div>
+            <div className="buttons">
+              <button
+                type="button"
+                className="add-to-cart"
+                onClick={() => {
+                  notify("Success", true);
+                  onAddToCart();
+                }}
+              >
+                Add to Cart
+              </button>
+              <button type="button" className="buy-now" onClick={handleBuyNow}>
+                Buy Now
+              </button>
+            </div>
+            <Link href="/login">{notification && (
+              <h3 className="animate-charcter"> {notification}</h3>
+            )}</Link>
+          </div>
+        </div>
+
+        <div className="maylike-products-wrapper">
+          <h2>You may also like</h2>
+          <div className="marquee">
+            <div className="maylike-products-container track">
+              {products?.map((product) => (
+                <Product idd={product?.node} />
+              ))}
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </>
   );
 };

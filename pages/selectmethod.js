@@ -7,6 +7,10 @@ function SelectMethod() {
     typeof window !== "undefined" ? localStorage.getItem("ctoken") : null;
   const dID =
     typeof window !== "undefined" ? localStorage.getItem("dID") : null;
+  let accessToken;
+  if (typeof window !== "undefined") {
+    accessToken = localStorage.getItem("accessToken");
+  }
 
   const [
     checkoutDeliveryMethodUpdate,
@@ -21,6 +25,12 @@ function SelectMethod() {
             dId: dID,
             ctoken: ctoken,
             locale: "EN",
+          },
+          context: {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`, // Include the access token in the Authorization header
+            },
           },
         });
         console.log("selectmethod data: ", data);

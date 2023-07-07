@@ -7,7 +7,7 @@ import { useState, useContext, useEffect } from "react";
 // import { setLocalStorage } from '@/functions/dashboardFunctions';
 // import {redText} from '../../styles/styles.module.css'
 
-import { useLoginMutation } from "@/saleor/api";
+import { useLoginMutation, useRefreshTokenMutation } from "@/saleor/api";
 
 import AuthContext from "../context/AuthProvider";
 import Header from "@/components/Header";
@@ -19,6 +19,7 @@ export default function Login() {
 
   const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [notification, setNotification] = useState("");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,6 +28,20 @@ export default function Login() {
   const [success, setSuccess] = useState(false);
 
   const [login, { loading, error }] = useLoginMutation();
+  const [tokenRefresh] = useRefreshTokenMutation();
+
+  async function rt(refreshToken) {
+    try {
+      const dataa = await tokenRefresh({
+        variables: {
+          refreshToken: refreshToken,
+        },
+      });
+      return dataa?.data?.tokenRefresh?.token
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
 
   const handleClick = async () => {
     try {
@@ -36,61 +51,45 @@ export default function Login() {
           password: password,
         },
       });
-      console.log("login data: ", data);
-      if (data) {
+
+      if (data && data.tokenCreate.errors.length < 1) {
         const accessToken = data?.tokenCreate?.token;
         const refreshToken = data?.tokenCreate?.refreshToken;
 
         localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
+
+        // const refreshToken = async () => {
+        // Perform the necessary steps to generate a new token
+        // let newToken = data
+        // console.log(newToken)
+        // Update the token in the local storage
+        // localStorage.setItem('accessToken', newToken);
+
+        // Restart the timer for the next token refresh
+        // clearTimeout(refreshTimer);
+        // refreshTimer = setTimeout(refreshToken, 1000); // 30 seconds
+        // };
+
+        // refreshToken();
+
         if (accessToken) {
           localStorage.setItem("isLoggedIn", true);
         }
-        localStorage.setItem("refreshToken", refreshToken);
 
         // setAuth({"accessToken" : accessToken, "refreshToken" : refreshToken});
 
         Router.push({ pathname: "/" });
       }
+      if (data?.tokenCreate.errors) {
+        console.log(data?.tokenCreate?.errors[0]?.message);
+        setNotification(data?.tokenCreate?.errors[0]?.message);
+      }
     } catch (error) {
       console.error("Error:", error);
     }
 
-    // try{
-    //   let json = await login(email, password);
-
-    //     if(json?.code > 202){
-    //       setHasError(true);
-    //       setErrorMessage(json?.message);
-    //       console.log('main error : ', json?.message);
-    //     }
-
-    //     else{
-    //       const accessToken = json?.data?.tokens?.access?.token;
-    //       const refreshToken = json?.data?.tokens?.refresh?.token;
-    //       const userId = json?.data?.user?.id;
-    //       const name = json?.data?.user?.name;
-
-    //       setAuth({email, password, accessToken, refreshToken, userId, name});
-    //       setData(json);
-
-    //       console.log('token : ', accessToken);
-    //       console.log('user id : ', userId);
-
-    //       setLocalStorage('accessToken', accessToken);
-    //       setLocalStorage('refreshToken', refreshToken);
-    //       setLocalStorage('userId', userId);
-    //       setLocalStorage('name', name);
-
-    //       // if(accessToken){
-    //       //   Router.push(`/dashboard`);
-    //       // }
-    //     }
-
-    // }
-    // catch(err){
-    //   setHasError(true);
-    //   console.log('error : ',err);
-    // }
+    console.log(notification);
   };
 
   useEffect(() => {
@@ -110,9 +109,32 @@ export default function Login() {
     }, 5000);
   }, []);
 
+  let refreshToken;
+
+  if (typeof window !== "undefined") {
+    refreshToken = localStorage.getItem("refreshToken");
+  }
+
+  useEffect(() => {
+    const interval = setInterval(async () => {
+
+      let refreshToken
+      if (typeof window !== "undefined") {
+      refreshToken = localStorage.getItem("refreshToken");
+      }
+      const refreshedToken = await rt(refreshToken);
+
+      localStorage.setItem("accessToken", refreshedToken);
+      console.log(refreshedToken)
+    },1000); 
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [refreshToken, rt]);
   return (
     <>
-    <Navbar/>
+      <Navbar />
       <div
         style={{
           display: "flex",
@@ -138,6 +160,14 @@ export default function Login() {
                 Login Here!
               </h1>
             </div>
+            {notification && (
+              <p
+                style={{ textAlign: "center", marginBottom: "3vh" }}
+                className="text-red-500"
+              >
+                {notification}
+              </p>
+            )}
 
             <Form.Group
               className="form-group-width mb-3 flex justify-center"

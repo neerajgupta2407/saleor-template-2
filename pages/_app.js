@@ -7,12 +7,12 @@ import store from "@/store/store";
 
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 import Layout from "@/components/Layout";
+import { useEffect } from "react";
 
 const client = new ApolloClient({
   uri: "https://shop-api.algomock.in/graphql/",
   cache: new InMemoryCache(),
 });
-
 
 
 export default function App({ Component, pageProps }) {
@@ -37,7 +37,7 @@ export default function App({ Component, pageProps }) {
         </Head>
         <Provider store={store}>
           <Layout>
-          <Component {...pageProps} />
+            <Component {...pageProps} />
           </Layout>
         </Provider>
       </ApolloProvider>

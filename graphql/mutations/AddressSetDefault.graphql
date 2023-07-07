@@ -1,9 +1,17 @@
-mutation AddressSetDefault($addressID: ID!, $userID: ID!, $addressType: AddressTypeEnum!) {
-  addressSetDefault(addressId: $addressID, type: $addressType, userId: $userID) {
-    errors {
-      field
-      message
-      code
+mutation SetAddress($id: ID!, $type: AddressTypeEnum!) {
+  accountSetDefaultAddress(id: $id, type: $type) {
+    user {
+      addresses {
+        ...AddressDetailsFragment
+        __typename
+      }
+      __typename
     }
+    errors {
+      code
+      message
+      __typename
+    }
+    __typename
   }
 }
