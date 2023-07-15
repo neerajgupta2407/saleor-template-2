@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { useDeleteitemMutation, useUpdateitemMutation } from "@/saleor/api";
-import { AiOutlineMinus, AiOutlinePlus, AiOutlineShopping } from "react-icons/ai";
+import {
+  AiOutlineMinus,
+  AiOutlinePlus,
+  AiOutlineShopping,
+} from "react-icons/ai";
 import { TiDeleteOutline } from "react-icons/ti";
 import { useLocalStorage } from "react-use";
 import Link from "next/link";
 
 const Productitem = (product) => {
-  const [token] = useLocalStorage("token");
+  let token;
+  if (typeof window !== "undefined") {
+    token = localStorage.getItem("token");
+  }
   const lineid = localStorage.getItem("lineid");
   const [checkoutLineUpdate] = useUpdateitemMutation();
   const [checkoutLineDelete] = useDeleteitemMutation();
@@ -76,11 +83,11 @@ const Productitem = (product) => {
           <div className="flex top mb-30">
             <h5>{product?.product?.variant?.product?.name}</h5>
           </div>
-          <h4>
+          <h4 style={{ marginTop: "20px" }}>
             MRP : &#8377;
             {product?.product?.variant?.pricing?.price?.gross?.amount}
           </h4>
-          <div className="flex bottom">
+          <div style={{ marginTop: "20px" }} className="flex bottom">
             <div>
               <p className="quantity-desc">
                 <span className="minus">
@@ -100,7 +107,6 @@ const Productitem = (product) => {
           </div>
         </div>
       </div>
-      
     </div>
   );
 };

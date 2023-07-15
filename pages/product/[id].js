@@ -1,30 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { IoMdHeartEmpty } from "react-icons/io";
-import Wrapper from "@/components/Wrapper";
-import ProductDetailsCarousel from "@/components/ProductDetailsCarousel";
-import { getDiscountedPricePercentage } from "@/utils/helper";
-import ReactMarkdown from "react-markdown";
-import { useSelector, useDispatch } from "react-redux";
-import { addToCart } from "@/store/cartSlice";
 import { useRouter } from "next/router";
-
 import {
   useProductByIdQuery,
   useProductAddVariantToCartMutation,
   useProductFilterByNameQuery,
+  useCheckoutCreateMutation,
 } from "@/saleor/api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Router from "next/router";
 import {
   AiOutlineMinus,
   AiOutlinePlus,
   AiFillStar,
   AiOutlineStar,
 } from "react-icons/ai";
-
 import { useLocalStorage } from "react-use";
-import Header from "@/components/Header";
 import Image from "next/image";
 import Product from "@/components/Product";
 import Link from "next/link";
@@ -67,33 +57,65 @@ const ProductDetails = () => {
     });
   };
 
+  const [cl, setCl] = useState(0);
+  const [checkoutCreate, { kdata, kloading }] = useCheckoutCreateMutation();
+
   const onAddToCart = async () => {
+    if (accessToken !== null) {
+      notify("Success", true);
+      setCl(cl + 1);
+    }
+
+    let token;
+
+    if (typeof window !== "undefined") {
+      token = localStorage.getItem("token");
+    }
+
+    if (token === null && accessToken !== null) {
+      const { data } = await checkoutCreate({
+        context: {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+      });
+
+      token = data?.checkoutCreate?.checkout?.token;
+      console.log("token: ", token);
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem("token", token);
+      }
+    }
     if (!accessToken) {
       setNotification("Please login to continue");
     }
-    console.log(accessToken)
-    if(accessToken !== null) {
-    const { data, loading, error } = await addProductToCart({
-      variables: {
-        checkoutToken: token,
-        variantId: selectedVariantID,
-        qty: qty,
-      },
-    });
-    pl++;
-    console.log("pl", pl);
-    localStorage.setItem("productsL", pl);
-    localStorage.setItem(
-      "lineid",
-      data?.checkoutLinesAdd?.checkout?.lines[0]?.id
-    );
+
+    if (token !== null && accessToken !== null) {
+      const { data, loading, error } = await addProductToCart({
+        variables: {
+          checkoutToken: token,
+          variantId: selectedVariantID,
+          qty: qty,
+        },
+        context: {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+      });
+
+      pl++;
+      localStorage.setItem("productsL", pl);
+      localStorage.setItem(
+        "lineid",
+        data?.checkoutLinesAdd?.checkout?.lines[0]?.id
+      );
     }
   };
-
-  const [selectedSize, setSelectedSize] = useState();
-  const [showError, setShowError] = useState(false);
-
-  const [isSelected, setIsSelected] = useState(false);
 
   const notify = (message, isSuccess) => {
     toast[isSuccess ? "success" : "error"](message, {
@@ -109,31 +131,6 @@ const ProductDetails = () => {
     });
   };
 
-  const [selectedVariant, setSelectedVariant] = useState(null);
-
-  const buttonStyle = {
-    backgroundColor: "grey",
-    color: "white",
-    padding: "10px 20px",
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer",
-  };
-
-  const selectedButtonStyle = {
-    backgroundColor: "black",
-    color: "white",
-    padding: "10px 20px",
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer",
-  };
-
-  const handleClick = (variant) => {
-    setSelectedVariant(variant);
-    setIsSelected(!isSelected);
-  };
-
   const getproducts = () => {
     const { data } = useProductFilterByNameQuery({
       variables: {
@@ -147,43 +144,60 @@ const ProductDetails = () => {
   console.log(products);
 
   const myLoader = ({ src }) => {
-    return product?.media[0]?.url;
-  };
-
-  const [showCart, setShowCart] = useState(false);
-
-  const handlebuy = () => {
-    setShowCart(true);
+    return product?.media[index]?.url;
   };
 
   const handleBuyNow = () => {
     if (!accessToken) {
       setNotification("Please login to continue");
+    } else {
+      notify("Success", true);
+      onAddToCart();
+      router.push({
+        pathname: "/cart",
+      });
     }
-    else {
-    notify("Success", true);
-    onAddToCart();
-    router.push({
-      pathname: "/cart",
-    });
-  }
   };
+
+  let dataa;
+
+  if (product?.description) {
+    const jsonString = product?.description;
+    console.log(jsonString);
+    dataa = JSON.parse(jsonString);
+    console.log(dataa.blocks[0].data.text);
+  }
+  const [index, setIndex] = useState(0);
 
   return (
     <>
-      <Navbar />
+      <Navbar cl={cl} />
       <div>
         <div className="product-detail-container">
           <ToastContainer />
           <div>
             <div className="image-container">
               <Image
-                src={product?.media[0]?.url}
+                src={product?.media[index]?.url}
+                alt={product?.name}
                 loader={myLoader}
-                width={200}
-                height={200}
-                className="product-detail-image lg:w-20 lg:h-20 sm:w-100 sm:h-100"
+                width={300}
+                height={300}
+                className="product-detail-image"
               />
+            </div>
+            <div className="small-images-container">
+              {product?.media.map((item, i) => (
+                <img
+                  key={i}
+                  loader={item.url}
+                  src={item.url}
+                  className={
+                    i === index ? "small-image selected-image" : "small-image"
+                  }
+                  onMouseEnter={() => setIndex(i)}
+                />
+              ))}
             </div>
           </div>
 
@@ -200,7 +214,7 @@ const ProductDetails = () => {
               <p>(20)</p>
             </div>
             <h4>Details: </h4>
-            <p>{product?.category?.name}</p>
+            <p>{dataa?.blocks[0].data.text}</p>
             <p className="price">
               &#8377;
               {product?.variants[0]?.pricing?.price?.gross?.amount}
@@ -222,7 +236,6 @@ const ProductDetails = () => {
                 type="button"
                 className="add-to-cart"
                 onClick={() => {
-                  notify("Success", true);
                   onAddToCart();
                 }}
               >
@@ -232,9 +245,11 @@ const ProductDetails = () => {
                 Buy Now
               </button>
             </div>
-            <Link href="/login">{notification && (
-              <h3 className="animate-charcter"> {notification}</h3>
-            )}</Link>
+            <Link href="/login">
+              {notification && (
+                <h3 className="animate-charcter"> {notification}</h3>
+              )}
+            </Link>
           </div>
         </div>
 

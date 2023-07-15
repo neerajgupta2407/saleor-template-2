@@ -463,18 +463,18 @@ span.text-red {
 }
 .product-detail-desc .buttons {
   display: flex;
-  gap: 30px;
+  gap: 10px;
 }
 .buttons .add-to-cart {
-  padding: 10px 20px;
+  padding: 10px 10px;
   border: 1px solid #f02d34;
   margin-top: 40px;
-  font-size: 18px;
+  font-size: 13px;
   font-weight: 500;
   background-color: white;
   color: #f02d34;
   cursor: pointer;
-  width: 200px;
+  width: 100px;
   transform: scale(1, 1);
   transition: transform 0.5s ease;
 }
@@ -482,14 +482,13 @@ span.text-red {
   transform: scale(1.1, 1.1);
 }
 .buttons .buy-now {
-  width: 200px;
-
-  padding: 10px 20px;
+  width: 100px;
+  padding: 10px 10px;
   background-color: #f02d34;
   color: white;
   border: none;
   margin-top: 40px;
-  font-size: 18px;
+  font-size: 13px;
   font-weight: 500;
   cursor: pointer;
   transform: scale(1, 1);
@@ -717,7 +716,7 @@ span.text-red {
   }
   .success,
   .cancel {
-    width: 370px;
+    width: 300px;
     margin-top: 100px;
     padding: 20px;
   }
@@ -778,19 +777,41 @@ span.text-red {
   margin-left: 8px; /* Add some space between icon and text */
 }
 
-/* Add this CSS in your component's CSS file or global styles */
-
 .table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 16px;
 }
 
+@media (max-width: 767px) {
+  table th {
+    font-size: 12px;
+    text-align: left;
+    padding: 6px 8px;
+  }
+  table td {
+    font-size: 10px;
+    text-align: left;
+    padding: 6px 8px;
+  }
+}
+@media (min-width: 1024px) {
+  table th {
+    font-size: 18px;
+    text-align: left;
+    padding: 18px 56px;
+  }
+  table td {
+    font-size: 16px;
+    text-align: left;
+    padding: 18px 56px;
+  }
+}
+/* 
 .table th,
 .table td {
   padding: 18px 56px;
   text-align: left;
-}
+} */
 
 .table thead th {
   background-color: #f0f0f0;
@@ -833,12 +854,26 @@ span.text-red {
   }
 }
 
-
-.colu{
-    padding-right: 240px;
+.colu {
+  padding-right: 240px;
 }
 
-.golu
-{
-    padding-bottom: 20px;
+.golu {
+  padding-bottom: 20px;
+}
+.ct {
+  font-size: 16px; 
+}
+
+@media only screen and (max-width: 768px) {
+  .ct {
+    font-size: 10px; 
+  }
+}
+
+
+.user-menu{
+    z-index: 999;
+    position: absolute;
+    padding: 5px;
 }

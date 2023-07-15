@@ -1,5 +1,14 @@
 fragment CheckoutFragment on Checkout {
   id
+  shippingMethods
+  {
+    id
+    name
+    price {
+      currency
+      amount
+    }
+  }
   email
   lines {
     quantity

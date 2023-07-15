@@ -36,7 +36,7 @@ const Table = () => {
             <Link href={`/ap/orders/${item?.node?.token}`}>
               <td>{item?.node?.number}</td>
             </Link>
-            <td>{item?.node?.created}</td>
+            <td>{item?.node?.created.substring(0,10)}</td>
             <td>{item?.node?.status}</td>
             <td>{item?.node?.total?.gross?.amount}</td>
           </tr>

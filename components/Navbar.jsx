@@ -3,8 +3,10 @@ import Link from "next/link";
 import { AiOutlineShopping, AiOutlineUser } from "react-icons/ai";
 import Router from "next/router";
 import { BiUserCircle } from "react-icons/bi";
+import Dropdown from "react-bootstrap/Dropdown";
+import DropdownButton from "react-bootstrap/DropdownButton";
 
-const Navbar = ({ iconValue }) => {
+const Navbar = ({ cl }) => {
   //   const { showCart, setShowCart, totalQuantities } = useStateContext();
   const [hasToken, setHasToken] = useState(false);
   const handleCart = () => {
@@ -45,7 +47,7 @@ const Navbar = ({ iconValue }) => {
       <div>
         <button type="button" className="cart-icon mr-4" onClick={handleCart}>
           <AiOutlineShopping />
-          <span className="cart-item-qty"></span>
+          <span className="cart-item-qty">{cl}</span>
         </button>
         {console.log(hasToken)}
         {hasToken && (
@@ -54,13 +56,13 @@ const Navbar = ({ iconValue }) => {
               <BiUserCircle />
             </button>
             {isMenuOpen && (
-              <div className="user-menu">
-                <ul>
-                  <li>
+              <div className="user-menu bg-white rounded-md shadow-lg">
+                <ul style={{ listStyle: "none" }}>
+                  <li >
                     <Link href="/logout">Logout</Link>
                   </li>
-                  <li>
-                    <Link href="/ap">Account Preferences</Link>
+                  <li style={{ marginTop: "5px" }}>
+                    <Link href="/ap/account">Account Preferences</Link>
                   </li>
                 </ul>
               </div>

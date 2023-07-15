@@ -22,57 +22,6 @@ export default function Home({ bannerData }) {
   });
   const products = data?.products?.edges;
   console.log(products);
-  const [token, setToken] = useLocalStorage("token");
-
-  const [checkoutCreate, { kdata, kloading }] = useCheckoutCreateMutation();
-  const [tokenRefresh] = useRefreshTokenMutation();
-
-  async function rt(refreshToken) {
-    try {
-      const dataa = await tokenRefresh({
-        variables: {
-          refreshToken: refreshToken,
-        },
-      });
-      return dataa?.data?.tokenRefresh?.token;
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  }
-
-  useEffect(() => {
-    async function doCheckout() {
-      const { data } = await checkoutCreate();
-      const token = data?.checkoutCreate?.checkout?.token;
-      console.log("token : ", token);
-      setToken(token);
-    }
-
-    doCheckout();
-  }, []);
-
-  let refreshToken;
-
-  if (typeof window !== "undefined") {
-    refreshToken = localStorage.getItem("refreshToken");
-  }
-
-  useEffect(() => {
-    const interval = setInterval(async () => {
-      let refreshToken;
-      if (typeof window !== "undefined") {
-        refreshToken = localStorage.getItem("refreshToken");
-      }
-      const refreshedToken = await rt(refreshToken);
-
-      localStorage.setItem("accessToken", refreshedToken);
-      console.log(refreshedToken);
-    }, 30000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [refreshToken, rt]);
 
   return (
     <div>

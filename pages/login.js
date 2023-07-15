@@ -13,9 +13,11 @@ import AuthContext from "../context/AuthProvider";
 import Header from "@/components/Header";
 import Wrapper from "@/components/Wrapper";
 import Navbar from "@/components/Navbar";
+import { RiEyeFill, RiEyeCloseFill } from "react-icons/ri";
 
 export default function Login() {
   // const {auth, setAuth} = useContext(AuthContext);
+  const [showPassword, setShowPassword] = useState(false);
 
   const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -28,20 +30,6 @@ export default function Login() {
   const [success, setSuccess] = useState(false);
 
   const [login, { loading, error }] = useLoginMutation();
-  const [tokenRefresh] = useRefreshTokenMutation();
-
-  async function rt(refreshToken) {
-    try {
-      const dataa = await tokenRefresh({
-        variables: {
-          refreshToken: refreshToken,
-        },
-      });
-      return dataa?.data?.tokenRefresh?.token
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  }
 
   const handleClick = async () => {
     try {
@@ -109,38 +97,16 @@ export default function Login() {
     }, 5000);
   }, []);
 
-  let refreshToken;
-
-  if (typeof window !== "undefined") {
-    refreshToken = localStorage.getItem("refreshToken");
-  }
-
-  useEffect(() => {
-    const interval = setInterval(async () => {
-
-      let refreshToken
-      if (typeof window !== "undefined") {
-      refreshToken = localStorage.getItem("refreshToken");
-      }
-      const refreshedToken = await rt(refreshToken);
-
-      localStorage.setItem("accessToken", refreshedToken);
-      console.log(refreshedToken)
-    },1000); 
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [refreshToken, rt]);
   return (
-    <>
+    <div style={{ padding: "0px", margin: "0px" }}>
       <Navbar />
       <div
         style={{
           display: "flex",
-          justifyContent: "center",
           alignItems: "center",
-          height: "90vh",
+          justifyContent: "center",
+          padding: "0px",
+          height: "70vh",
         }}
       >
         <div>
@@ -148,13 +114,7 @@ export default function Login() {
             <h3 style={{ color: "green" }}>Account created successfully!</h3>
           ) : null}
 
-          <Form
-            style={{
-              width: "35vw",
-              border: "solid 1px gray",
-              padding: "3vh",
-            }}
-          >
+          <Form style={{ padding: "3vh" }}>
             <div style={{ textAlign: "center", marginBottom: "3vh" }}>
               <h1 style={{ fontSize: "40px", fontWeight: "bolder" }}>
                 Login Here!
@@ -170,10 +130,18 @@ export default function Login() {
             )}
 
             <Form.Group
-              className="form-group-width mb-3 flex justify-center"
+              className="flex justify-center"
               controlId="formBasicEmail"
             >
               <Form.Control
+                style={{
+                  width: "100%",
+                  borderRadius: "10px",
+                  border: "1px solid gray",
+                  fontSize: "18px",
+                  paddingLeft: "20px",
+                  height: "29px",
+                }}
                 type="email"
                 placeholder="Enter email"
                 value={email}
@@ -182,15 +150,32 @@ export default function Login() {
             </Form.Group>
 
             <Form.Group
-              className="form-group-width mb-3 flex justify-center"
+              className="flex justify-center"
               controlId="formBasicPassword"
             >
               <Form.Control
-                type="password"
+                style={{
+                  width: "100%",
+                  borderRadius: "10px",
+                  border: "1px solid gray",
+                  fontSize: "18px",
+                  paddingLeft: "20px",
+                  height: "29px",
+                  marginTop: "10px",
+                }}
+                type={showPassword ? "text" : "password"}
                 placeholder="Password"
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
+                className="password-input"
               />
+
+              {/* <div
+                className="show-password-icon"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <RiEyeCloseFill /> : <RiEyeFill />}
+              </div> */}
             </Form.Group>
             <div className="flex justify-center">
               <Button
@@ -214,6 +199,6 @@ export default function Login() {
           </Form>
         </div>
       </div>
-    </>
+    </div>
   );
 }

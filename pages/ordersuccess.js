@@ -6,6 +6,7 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import { BsBagCheckFill } from "react-icons/bs";
 import { runFireworks } from "../lib/utils";
+import Navbar from "@/components/Navbar";
 
 function ordersuccess() {
   let accessToken;
@@ -50,6 +51,8 @@ function ordersuccess() {
 
   console.log(myValue);
   return (
+    <>
+    <Navbar/>
     <div className="success-wrapper">
       <div className="success">
         <p className="icon">
@@ -64,12 +67,13 @@ function ordersuccess() {
           </a>
         </p>
         <Link href="/">
-          <button type="button" width="300px" className="btn">
+          <button type="button" width="200px" className="btn">
             Continue Shopping
           </button>
         </Link>
       </div>
     </div>
+    </>
   );
 }
 

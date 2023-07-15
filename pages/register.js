@@ -52,75 +52,106 @@ export default function JoinOurTeam() {
   }, [hasError]);
 
   return (
-    <>
-    <Navbar/>
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "90vh",
-      }}
-    >
-      <Form style={{ width: "40vw", border: "solid 1px gray", padding: "3vh" }}>
-        <div style={{ textAlign: "center", marginBottom: "3vh" }}>
-          <h1 style={{ fontSize: "40px", fontWeight: "bolder" }}>
-            Sign Up Here!
-          </h1>
-        </div>
+    <div style={{ padding: "0px", margin: "0px" }}>
+      <Navbar />
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "0px",
+          height: "70vh",
+        }}
+      >
+        <Form style={{ padding: "3vh" }}>
+          <div style={{ textAlign: "center", marginBottom: "3vh" }}>
+            <h1 style={{ fontSize: "40px", fontWeight: "bolder" }}>
+              Sign Up Here!
+            </h1>
+          </div>
 
-        <Form.Group
-          className="form-group-width mb-3 flex justify-center"
-          controlId="formBasicEmail"
-        >
-          <Form.Control
-            type="name"
-            placeholder="Enter name"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-          />
-        </Form.Group>
+          <Form.Group
+            className="flex justify-center"
+            controlId="formBasicEmail"
+          >
+            <Form.Control
+              style={{
+                width: "100%",
+                borderRadius: "10px",
+                border: "1px solid gray",
+                fontSize: "18px",
+                paddingLeft: "20px",
+                height: "29px",
+              }}
+              type="name"
+              placeholder="Enter name"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+            />
+          </Form.Group>
 
-        <Form.Group
-          className="form-group-width mb-3 flex justify-center"
-          controlId="formBasicEmail"
-        >
-          <Form.Control
-            type="email"
-            placeholder="Enter email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-          />
-        </Form.Group>
+          <Form.Group
+            className="flex justify-center"
+            controlId="formBasicEmail"
+          >
+            <Form.Control
+              style={{
+                width: "100%",
+                borderRadius: "10px",
+                border: "1px solid gray",
+                fontSize: "18px",
+                paddingLeft: "20px",
+                marginTop: "10px",
+                height: "29px",
+              }}
+              type="email"
+              placeholder="Enter email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+            />
+          </Form.Group>
 
-        <Form.Group
-          className="form-group-width mb-3 flex justify-center"
-          controlId="formBasicPassword"
-        >
-          <Form.Control
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-        </Form.Group>
-        <div className="flex justify-center">
-          <Button variant="dark" className="align-middle" onClick={handleClick}>
-            Submit
-          </Button>
-        </div>
+          <Form.Group
+            className="flex justify-center"
+            controlId="formBasicPassword"
+          >
+            <Form.Control
+              style={{
+                width: "100%",
+                borderRadius: "10px",
+                border: "1px solid gray",
+                fontSize: "18px",
+                paddingLeft: "20px",
+                marginTop: "10px",
+                height: "29px",
+              }}
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+            />
+          </Form.Group>
+          <div className="flex justify-center">
+            <Button
+              variant="dark"
+              className="align-middle"
+              onClick={handleClick}
+            >
+              Submit
+            </Button>
+          </div>
 
-        <div style={{ textAlign: "center", marginTop: "1.5vh" }}>
-          {hasError ? <p className={redText}>{errorMessage}</p> : null}
-        </div>
+          <div style={{ textAlign: "center", marginTop: "1.5vh" }}>
+            {hasError ? <p className={redText}>{errorMessage}</p> : null}
+          </div>
 
-        <div style={{ textAlign: "center", marginTop: "1.5vh" }}>
-          <a href="/login" style={{ textDecoration: "none" }}>
-            Login here, If you already have an account
-          </a>
-        </div>
-      </Form>
+          <div style={{ textAlign: "center", marginTop: "1.5vh" }}>
+            <a href="/login" style={{ textDecoration: "none" }}>
+              Login here, If you already have an account
+            </a>
+          </div>
+        </Form>
+      </div>
     </div>
-    </>
   );
 }

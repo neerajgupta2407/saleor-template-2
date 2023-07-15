@@ -5,11 +5,11 @@ const Layout = ({ content }) => {
   return (
     <>
       <Navbar />
-      <div className="flex">
-        <div className="sidebar-container">
+      <div className="flex flex-col md:flex-row">
+        <div className="md:w-1/3 w-full p-4 md:mr-2 md:mb-0 mb-4">
           <Sidebar />
         </div>
-        <div className="content-container">{content}</div>
+        <div className="md:w-2/3 p-4">{content}</div>
       </div>
     </>
   );

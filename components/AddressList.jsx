@@ -84,7 +84,7 @@ const AddressList = ({ addresses }) => {
             padding: "10px",
             marginBottom: "10px",
             marginRight: "20px",
-            width: "200px",
+            width: "250px",
             display: "inline-block",
           }}
         >

@@ -23,8 +23,7 @@ const EmailChange = () => {
       style={{
         border: "1px solid #ccc",
         padding: "10px 10px 10px 10px",
-        marginBottom: "10px",
-        width: "800px",
+        marginBottom: "10px"
       }}
     >
       <h2 className="text-xl font-semibold">Change Email</h2>

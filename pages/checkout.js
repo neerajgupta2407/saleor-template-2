@@ -13,6 +13,9 @@ const Checkout = () => {
       ? JSON.parse(localStorage.getItem("products"))
       : null;
 
+      console.log(products)
+      
+
   useEffect(() => {
     if (!products) {
       Router.push("/"); // Redirect to the home page if products are not available
@@ -22,11 +25,11 @@ const Checkout = () => {
   return (
     <>
     <Navbar/>
-      <main className="w-screen max-w-7xl md:px-8 md:mx-auto overflow-hidden flex md:flex-row flex-col justify-between">
-        <div className="md:w-1/2 w-full">
+      <main className="flex flex-col md:flex-row">
+        <div className="md:w-1/2 w-full p-4 md:mr-4 md:mb-0 mb-4">
           <CheckoutForm products={products} />
         </div>
-        <div className="md:w-1/2 w-full">
+        <div className="md:w-1/2 p-4">
           <CheckoutSidebar products={products} />
         </div>
       </main>
