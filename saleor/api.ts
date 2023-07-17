@@ -27483,6 +27483,19 @@ export type ProductPathsQueryVariables = Exact<{
 
 export type ProductPathsQuery = { __typename?: 'Query', products?: { __typename?: 'ProductCountableConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'ProductCountableEdge', node: { __typename?: 'Product', slug: string } }> } | null };
 
+export type ProductCollectionSearchQueryVariables = Exact<{
+  before?: InputMaybe<Scalars['String']>;
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  filter?: InputMaybe<ProductFilterInput>;
+  sortBy?: InputMaybe<ProductOrder>;
+  channel: Scalars['String'];
+  locale: LanguageCodeEnum;
+}>;
+
+
+export type ProductCollectionSearchQuery = { __typename?: 'Query', products?: { __typename: 'ProductCountableConnection', totalCount?: number | null, edges: Array<{ __typename: 'ProductCountableEdge', cursor: string, node: { __typename: 'Product', id: string, slug: string, name: string, translation?: { __typename?: 'ProductTranslation', id: string, name?: string | null } | null, thumbnail?: { __typename?: 'Image', url: string, alt?: string | null } | null, category?: { __typename?: 'Category', id: string, name: string, translation?: { __typename?: 'CategoryTranslation', id: string, name?: string | null } | null } | null, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string, type: ProductMediaType }> | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', slug?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null }> }> } }>, pageInfo: { __typename: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } } | null };
+
 export type ProductSearchTShirtQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -30437,6 +30450,70 @@ export function useProductPathsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type ProductPathsQueryHookResult = ReturnType<typeof useProductPathsQuery>;
 export type ProductPathsLazyQueryHookResult = ReturnType<typeof useProductPathsLazyQuery>;
 export type ProductPathsQueryResult = Apollo.QueryResult<ProductPathsQuery, ProductPathsQueryVariables>;
+export const ProductCollectionSearchDocument = gql`
+    query ProductCollectionSearch($before: String, $after: String, $first: Int = 6, $filter: ProductFilterInput, $sortBy: ProductOrder, $channel: String!, $locale: LanguageCodeEnum!) {
+  products(
+    first: $first
+    channel: $channel
+    after: $after
+    before: $before
+    filter: $filter
+    sortBy: $sortBy
+  ) {
+    totalCount
+    edges {
+      cursor
+      node {
+        ...ProductCardFragment
+        __typename
+      }
+      __typename
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+      __typename
+    }
+    __typename
+  }
+}
+    ${ProductCardFragmentFragmentDoc}`;
+
+/**
+ * __useProductCollectionSearchQuery__
+ *
+ * To run a query within a React component, call `useProductCollectionSearchQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProductCollectionSearchQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProductCollectionSearchQuery({
+ *   variables: {
+ *      before: // value for 'before'
+ *      after: // value for 'after'
+ *      first: // value for 'first'
+ *      filter: // value for 'filter'
+ *      sortBy: // value for 'sortBy'
+ *      channel: // value for 'channel'
+ *      locale: // value for 'locale'
+ *   },
+ * });
+ */
+export function useProductCollectionSearchQuery(baseOptions: Apollo.QueryHookOptions<ProductCollectionSearchQuery, ProductCollectionSearchQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProductCollectionSearchQuery, ProductCollectionSearchQueryVariables>(ProductCollectionSearchDocument, options);
+      }
+export function useProductCollectionSearchLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProductCollectionSearchQuery, ProductCollectionSearchQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProductCollectionSearchQuery, ProductCollectionSearchQueryVariables>(ProductCollectionSearchDocument, options);
+        }
+export type ProductCollectionSearchQueryHookResult = ReturnType<typeof useProductCollectionSearchQuery>;
+export type ProductCollectionSearchLazyQueryHookResult = ReturnType<typeof useProductCollectionSearchLazyQuery>;
+export type ProductCollectionSearchQueryResult = Apollo.QueryResult<ProductCollectionSearchQuery, ProductCollectionSearchQueryVariables>;
 export const ProductSearchTShirtDocument = gql`
     query ProductSearchTShirt {
   products(first: 12, channel: "default-channel", filter: {search: "t-shirt"}) {

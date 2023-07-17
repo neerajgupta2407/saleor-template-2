@@ -3,12 +3,15 @@ import Link from "next/link";
 import Image from "next/image";
 
 const Product = ({ idd }) => {
-  console.log(idd)
+  console.log(idd);
   const myLoader = ({ src }) => {
     return idd?.thumbnail?.url;
   };
   const id = idd?.id;
-  const iname =  idd?.name.split(' ').slice(0,4).join(' ');
+  const iname = idd?.name
+    .split(" ")
+    .slice(0, 4)
+    .join(" ");
   return (
     <div>
       <Link href={`/product/${id}`}>
@@ -17,14 +20,16 @@ const Product = ({ idd }) => {
             loader={myLoader}
             src={idd?.thumbnail?.url}
             alt={idd?.name}
-            width={250}
-            height={250}
+            width={243}
+            height={243}
             className="product-image"
           />
           <p className="product-name">{iname}</p>
-          <p className="product-price">
-            &#8377;{idd?.pricing.priceRange.start.gross.amount}{" "}
-          </p>
+          {idd?.pricing?.priceRange?.start?.gross?.amount && (
+            <p className="product-price">
+              &#8377;{idd?.pricing?.priceRange?.start?.gross?.amount}
+            </p>
+          )}
         </div>
       </Link>
     </div>

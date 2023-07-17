@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { AiOutlineShopping, AiOutlineUser } from "react-icons/ai";
+import {
+  AiOutlineSearch,
+  AiOutlineShopping,
+  AiOutlineUser,
+} from "react-icons/ai";
 import Router from "next/router";
 import { BiUserCircle } from "react-icons/bi";
 import Dropdown from "react-bootstrap/Dropdown";
@@ -29,7 +33,7 @@ const Navbar = ({ cl }) => {
     if (typeof window !== "undefined") {
       const token = window.localStorage.getItem("accessToken");
       const productsl = window.localStorage.getItem("pl");
-      if (token) {
+      if (token && token !== "undefined" ) {
         setHasToken(true);
       }
       if (productsl !== null) {
@@ -45,6 +49,11 @@ const Navbar = ({ cl }) => {
       </p>
 
       <div>
+        <Link href="/search">
+          <button type="button" className="cart-icon mr-2">
+            <AiOutlineSearch />
+          </button>
+        </Link>
         <button type="button" className="cart-icon mr-4" onClick={handleCart}>
           <AiOutlineShopping />
           <span className="cart-item-qty">{cl}</span>
@@ -58,7 +67,7 @@ const Navbar = ({ cl }) => {
             {isMenuOpen && (
               <div className="user-menu bg-white rounded-md shadow-lg">
                 <ul style={{ listStyle: "none" }}>
-                  <li >
+                  <li>
                     <Link href="/logout">Logout</Link>
                   </li>
                   <li style={{ marginTop: "5px" }}>

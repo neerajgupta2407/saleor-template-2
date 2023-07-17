@@ -1,0 +1,21 @@
+query ProductCollectionSearch($before: String, $after: String, $first: Int = 6, $filter: ProductFilterInput, $sortBy: ProductOrder, $channel: String!, $locale: LanguageCodeEnum!) {
+  products(first: $first, channel: $channel, after: $after, before: $before, filter: $filter, sortBy: $sortBy) {
+    totalCount
+    edges {
+      cursor
+      node {
+        ...ProductCardFragment
+        __typename
+      }
+      __typename
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+      __typename
+    }
+    __typename
+  }
+}

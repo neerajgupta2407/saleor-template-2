@@ -98,7 +98,6 @@ span.text-red {
 .products-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
   gap: 15px;
   margin-top: 20px;
   width: 100%;
@@ -862,18 +861,17 @@ span.text-red {
   padding-bottom: 20px;
 }
 .ct {
-  font-size: 16px; 
+  font-size: 16px;
 }
 
 @media only screen and (max-width: 768px) {
   .ct {
-    font-size: 10px; 
+    font-size: 10px;
   }
 }
 
-
-.user-menu{
-    z-index: 999;
-    position: absolute;
-    padding: 5px;
+.user-menu {
+  z-index: 999;
+  position: absolute;
+  padding: 5px;
 }
