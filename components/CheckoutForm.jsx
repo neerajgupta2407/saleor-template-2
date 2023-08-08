@@ -5,6 +5,7 @@ import {
 } from "@/saleor/api";
 import React, { useState } from "react";
 import Router from "next/router";
+import Link from "next/link";
 
 function CheckoutForm() {
   let products;
@@ -161,7 +162,13 @@ function CheckoutForm() {
         <div>
           <h1 className="text-2xl font-semibold text-gray-900 mb-6">Account</h1>
           <p className="font-semibold text-gray-900 mb-6">
-            {data?.user?.email ? data.user.email : "Sign In"}
+            {data?.user?.email ? (
+              data.user.email
+            ) : (
+              <>
+                <Link href="/login">Sign in</Link>
+              </>
+            )}
           </p>
         </div>
         {addbt == true ? (
